@@ -1,26 +1,29 @@
-// To parse this JSON data, do
-//
-//     final Pokemon = PokemonFromJson(jsonString);
-
 import 'dart:convert';
 
-Pokemon PokemonFromJson(String str) => Pokemon.fromJson(json.decode(str));
+abstract class PokemonState {}
 
-String PokemonToJson(Pokemon data) => json.encode(data.toJson());
+class ListInitial extends PokemonState {}
 
-class Pokemon {
+class ListLoading extends PokemonState {}
+
+PokemonLoaded PokemonFromJson(String str) =>
+    PokemonLoaded.fromJson(json.decode(str));
+
+String PokemonToJson(PokemonLoaded data) => json.encode(data.toJson());
+
+class PokemonLoaded {
   List<Ability> abilities;
-  int baseExperience;
+  int? baseExperience;
   List<Species> forms;
   List<GameIndex> gameIndices;
-  int height;
+  int? height;
   List<dynamic> heldItems;
-  int id;
-  bool isDefault;
-  String locationAreaEncounters;
+  int? id;
+  bool? isDefault;
+  String? locationAreaEncounters;
   List<Move> moves;
-  String name;
-  int order;
+  String? name;
+  int? order;
   List<dynamic> pastAbilities;
   List<dynamic> pastTypes;
   Species species;
@@ -29,7 +32,7 @@ class Pokemon {
   List<Type> types;
   int weight;
 
-  Pokemon({
+  PokemonLoaded({
     required this.abilities,
     required this.baseExperience,
     required this.forms,
@@ -51,7 +54,7 @@ class Pokemon {
     required this.weight,
   });
 
-  factory Pokemon.fromJson(Map<String, dynamic> json) => Pokemon(
+  factory PokemonLoaded.fromJson(Map<String, dynamic> json) => PokemonLoaded(
         abilities: List<Ability>.from(
             json["abilities"].map((x) => Ability.fromJson(x))),
         baseExperience: json["base_experience"],
