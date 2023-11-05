@@ -1,8 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:proyectofinal/models/param.dart';
+import 'package:proyectofinal/models/pokemon.dart';
+import 'package:proyectofinal/states/cubit/listeners/app_cubit.dart';
+import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
+import 'package:proyectofinal/states/list_state.dart';
 import 'package:proyectofinal/themes/pokemons_types.dart';
 import 'package:proyectofinal/ui/android/widgets/bottom_bar.dart';
 import 'package:proyectofinal/ui/android/widgets/param_item.dart';
+import 'package:proyectofinal/ui/android/widgets/pokemon_item.dart';
+import 'package:shimmer/shimmer.dart';
 
 class seach_screen extends StatefulWidget {
   const seach_screen({Key? key}) : super(key: key);
@@ -30,15 +40,32 @@ class _seach_screen extends State<seach_screen> {
     Param(title: "Ice", url: "images/snover.png", color: Ice),
   ];
 
+  void redirect(String param) {
+    /*
+      Comprobar por nombre o por id 
+    */
+    context.read<ListCubit>().fetch();
+    context.read<AppCubit>().changeTheme(0);
+    GoRouter.of(context).go("/");
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     _searchController.addListener(() {
+      print(_searchController.text);
+
+      if (_searchController.text.contains("ditto") == true) {
+        //  _searchController.
+        print("DITTO");
+        context.read<ListCubit>()..filter_by_name(_searchController.text);
+
+        // context.read()<ListCubit>().filter_by_name("ditto");
+        GoRouter.of(context).go("/");
+      }
       /* Hacer una busqueda */
-         
 
-       // _searchController.selection.
-
+      // _searchController.
     });
     super.initState();
   }
@@ -47,34 +74,144 @@ class _seach_screen extends State<seach_screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: SearchBar(
-          controller: _searchController,
-          hintText: "Buscar pokemon",
-        ),
         title: const Text("Buscar"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: CustomSearchBar());
+              },
+              icon: const Icon(Icons.search))
+        ],
       ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 0,
-          mainAxisSpacing: 0,
-          childAspectRatio: 1.6,
-        ),
-        itemCount: 10,
-        itemBuilder: (BuildContext context, int index) {
-          double screenHeight = MediaQuery.of(context).size.height;
-          double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
-          double pokemonSize = screenHeight > 600 ? 50 : 70;
+      body: BlocBuilder<ListCubit, ListState>(builder: ((context, state) {
+        return GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
+            childAspectRatio: 1.6,
+          ),
+          itemCount: 10,
+          itemBuilder: (BuildContext context, int index) {
+            double screenHeight = MediaQuery.of(context).size.height;
+            double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
+            double pokemonSize = screenHeight > 600 ? 50 : 70;
 
-          return param_item(
-              title: param_list[index].title,
-              url: param_list[index].url,
-              color: param_list[index].color,
-              paddingPerSize: paddingPerSize,
-              pokemonSize: pokemonSize);
-        },
-      ),
+            return param_item(
+                title: param_list[index].title,
+                url: param_list[index].url,
+                color: param_list[index].color,
+                paddingPerSize: paddingPerSize,
+                pokemonSize: pokemonSize);
+          },
+        );
+      })),
       bottomNavigationBar: const bottom_bar(),
     );
+  }
+}
+
+class CustomSearchBar extends SearchDelegate {
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+          onPressed: () {
+            query = "";
+          },
+          icon: const Icon(Icons.clear))
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          GoRouter.of(context).go("/busqueda");
+          context.read<AppCubit>().changeTheme(3);
+        },
+        icon: Icon(Icons.arrow_back));
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Column(
+      children: [],
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    BlocProvider.of<ListCubit>(context).filter_by_name(query);
+    return BlocConsumer<ListCubit, ListState>(listener: (context, state) {
+      if (state is RepopulatedList) {}
+    }, builder: (context, state) {
+      if (state is ListLoading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (state is PopulatedList) {
+        print(state.pokemons.length);
+
+        List<Pokemon> list = state.pokemons;
+        //   list.sort((a, b) => a.id.compareTo(b.id));
+
+        return GridView.builder(
+            //   controller: controller,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 0,
+              mainAxisSpacing: 0,
+              childAspectRatio: 1.6,
+            ),
+            itemCount: state.pokemons.length,
+            itemBuilder: (BuildContext context, int index) {
+              double screenHeight = MediaQuery.of(context).size.height;
+              double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
+              double pokemonSize = screenHeight > 600 ? 50 : 70;
+              //    print(list[index].id);
+              return list_item(
+                  pokemon: list[index],
+                  types: list[index].types,
+                  name: list[index].name,
+                  paddingPerSize: paddingPerSize,
+                  pokemonSize: pokemonSize,
+                  url: list[index].sprites.frontDefault);
+            });
+      } else if (state is ListError) {
+        print(state.message);
+        return Center(child: Text(state.message));
+      } else if (state is RepopulatedList) {
+        //rprint("cargando");
+        List<Pokemon> list = state.pokemons;
+        //   list.sort((a, b) => a.id.compareTo(b.id));
+
+        print(state.pokemons.length);
+        return GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 0,
+              mainAxisSpacing: 0,
+              childAspectRatio: 1.6,
+            ),
+            itemCount: state.pokemons.length,
+            itemBuilder: (BuildContext context, int index) {
+              double screenHeight = MediaQuery.of(context).size.height;
+              double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
+              double pokemonSize = screenHeight > 600 ? 50 : 70;
+              return list_item(
+                  pokemon: list[index],
+                  types: list[index].types,
+                  name: list[index].name,
+                  paddingPerSize: paddingPerSize,
+                  pokemonSize: pokemonSize,
+                  url: list[index].sprites.frontDefault);
+            });
+      } else {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    });
   }
 }

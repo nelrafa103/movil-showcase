@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:proyectofinal/models/pokemon.dart';
 import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
 import 'package:proyectofinal/ui/android/screens/detail_screen.dart';
 import 'package:proyectofinal/ui/android/screens/home_screen.dart';
@@ -23,7 +24,9 @@ GoRouter router = GoRouter(routes: <RouteBase>[
         ),
         GoRoute(
           path: "detalle",
-          builder: (context, state) => PokemonDetail(),
+          builder: (context, state) => PokemonDetail(
+              //  pokemon: state.extra as Pokemon,
+              ),
         ),
         GoRoute(
           path: "busqueda",

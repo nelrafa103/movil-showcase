@@ -1,12 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:proyectofinal/models/hive/fav_dao.dart';
 import 'package:proyectofinal/models/pokemon.dart';
+import 'package:proyectofinal/sqflite.dart';
+import 'package:proyectofinal/states/cubit/listeners/pokemon_cubit.dart';
 import 'package:proyectofinal/themes/pokemons_types.dart';
 
 class list_item extends StatefulWidget {
   final String name;
+  final Pokemon pokemon;
   final List<Type> types;
   final String url;
   final double paddingPerSize;
@@ -14,6 +19,7 @@ class list_item extends StatefulWidget {
 
   const list_item(
       {super.key,
+      required this.pokemon,
       required this.name,
       required this.types,
       required this.url,
@@ -26,6 +32,16 @@ class list_item extends StatefulWidget {
 }
 
 class _list_item extends State<list_item> {
+  bool isFav = false;
+
+  @override
+  void initState() {
+    print(widget.pokemon.name);
+    isFav = DbInitializer.searchFav(widget.pokemon.name);
+    print(isFav);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     String types = '';
@@ -41,8 +57,22 @@ class _list_item extends State<list_item> {
       }
     }
 
+    void changeIcon() {
+      setState(() {
+        isFav = !isFav;
+      });
+    }
+
+    void funcion() {
+      // PokemonCubit()..providePokemon(widget.pokemon);
+      context.read<PokemonCubit>()..providePokemon(widget.pokemon);
+
+      // print(widget.pokemon.name);
+      GoRouter.of(context).go("/detalle");
+    }
+
     return GestureDetector(
-        onTap: () => {GoRouter.of(context).go("/detalle")},
+        onTap: () => funcion(),
         child: Card(
           elevation: 3,
           shape:
@@ -65,13 +95,32 @@ class _list_item extends State<list_item> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                          onPressed: () => {},
-                          icon: const Icon(
-                            Icons.favorite_border,
-                            size: 20,
-                            color: Colors.white,
-                          )),
-                      Text('#001',
+                          onPressed: () {
+                            DbInitializer.saveFavs(FavDao(
+                                name: widget.pokemon.name,
+                                id: widget.pokemon.id));
+                            changeIcon();
+                          },
+                          icon: isFav
+                              ? const Icon(
+                                  Icons.favorite,
+                                  size: 20,
+                                  color: Colors.red,
+                                )
+                              : const Icon(
+                                  Icons.favorite_border,
+                                  size: 20,
+                                  color: Colors.white,
+                                )),
+                      Text(
+                        types,
+                        style: GoogleFonts.montserrat(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text('#${widget.pokemon.id.toString()}',
                           style: GoogleFonts.montserrat(
                             color: Colors.white,
                             fontSize: 12,
@@ -112,7 +161,7 @@ class _list_item extends State<list_item> {
                           FilledButton(
                             onPressed: null,
                             style: FilledButton.styleFrom(
-                              padding: const EdgeInsets.all(12.0),
+                              padding: const EdgeInsets.all(13.0),
                             ),
                             child: Text(
                               widget.name,
@@ -121,14 +170,6 @@ class _list_item extends State<list_item> {
                                 fontWeight: FontWeight.w700,
                                 fontSize: 14,
                               ),
-                            ),
-                          ),
-                          Text(
-                            types,
-                            style: GoogleFonts.montserrat(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
                             ),
                           ),
                         ],

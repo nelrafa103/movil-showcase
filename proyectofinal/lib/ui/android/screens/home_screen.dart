@@ -1,12 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:proyectofinal/main.dart';
+import 'package:proyectofinal/models/hive/fav_dao.dart';
+import 'package:proyectofinal/models/hive/pokemon_dao.dart';
+import 'package:proyectofinal/models/pokemon.dart';
 import 'package:proyectofinal/sqflite.dart';
 import 'package:proyectofinal/states/cubit/listeners/pokemon_cubit.dart';
 import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
 import 'package:proyectofinal/states/list_state.dart';
 import 'package:proyectofinal/ui/android/widgets/bottom_bar.dart';
 import 'package:proyectofinal/ui/android/widgets/pokemon_item.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage(String s, {super.key, required this.title});
@@ -31,9 +38,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    //  Future<Object> tal = prueba();
+    //  print(tal);
     controller = ScrollController();
 
     controller.addListener(() {
+      // print(controller.position.maxScrollExtent);
+      // print(controller.offset);
       if (controller.hasClients) {
         if (controller.position.maxScrollExtent == controller.offset) {
           BlocProvider.of<ListCubit>(context).addMore();
@@ -58,6 +69,10 @@ class _MyHomePageState extends State<MyHomePage> {
             child: CircularProgressIndicator(),
           );
         } else if (state is PopulatedList) {
+          List<Pokemon> list = state.pokemons;
+          list.sort((a, b) => a.id.compareTo(b.id));
+          // print(list[0]);
+
           return GridView.builder(
               controller: controller,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -66,29 +81,124 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisSpacing: 0,
                 childAspectRatio: 1.6,
               ),
-              itemCount: 60,
+              itemCount:
+                  state.pokemons.length >= 20 ? state.pokemons.length : 20,
               itemBuilder: (BuildContext context, int index) {
                 double screenHeight = MediaQuery.of(context).size.height;
                 double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
                 double pokemonSize = screenHeight > 600 ? 50 : 70;
                 if (state.pokemons.length > index) {
+                  //    print(list[index].id);
+                  DbInitializer.insert(PokemonDao(
+                      name: list[index].name,
+                      id: list[index].id,
+                      url: list[index].sprites.frontDefault));
                   return list_item(
-                      types: state.pokemons[index].types,
-                      name: state.pokemons[index].name,
+                      pokemon: list[index],
+                      types: list[index].types,
+                      name: list[index].name,
                       paddingPerSize: paddingPerSize,
                       pokemonSize: pokemonSize,
-                      url: state.pokemons[index].sprites.frontDefault);
+                      url: list[index].sprites.frontDefault);
                 } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return Shimmer.fromColors(
+                      baseColor: Colors.black54,
+                      highlightColor: Colors.white70,
+                      child: SingleChildScrollView(
+                          padding: EdgeInsets.all(paddingPerSize),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                      onPressed: () => {},
+                                      icon: const Icon(
+                                        Icons.favorite_border,
+                                        size: 20,
+                                        color: Colors.white,
+                                      )),
+                                  Text('#',
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w800,
+                                      )),
+                                ],
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  //Foto del pokemon:
+                                  Container(
+                                    // color: Colors.grey,
+                                    width: pokemonSize,
+                                    height: pokemonSize,
+                                    child: Center(
+                                        child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Transform.scale(
+                                          scale: 1.3,
+                                          child: CachedNetworkImage(
+                                            imageUrl: "",
+                                            fit: BoxFit.fill,
+                                            filterQuality: FilterQuality.none,
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
+                                          )),
+                                    )),
+                                  ),
+
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      FilledButton(
+                                        onPressed: null,
+                                        style: FilledButton.styleFrom(
+                                          padding: const EdgeInsets.all(12.0),
+                                        ),
+                                        child: Text(
+                                          "",
+                                          style: GoogleFonts.montserrat(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        "",
+                                        style: GoogleFonts.montserrat(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )));
                 }
               });
         } else if (state is ListError) {
           print(state.message);
           return Center(child: Text(state.message));
         } else if (state is RepopulatedList) {
-          print(state.pokemons.length);
+          // print("cargando");
+          List<Pokemon> list = state.pokemons;
+          list.sort((a, b) => a.id.compareTo(b.id));
+
           return GridView.builder(
               controller: controller,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -97,26 +207,113 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisSpacing: 0,
                 childAspectRatio: 1.6,
               ),
-              // itemCount: 60,
+              itemCount:
+                  state.pokemons.length >= 20 ? state.pokemons.length : 20,
               itemBuilder: (BuildContext context, int index) {
                 double screenHeight = MediaQuery.of(context).size.height;
                 double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
                 double pokemonSize = screenHeight > 600 ? 50 : 70;
                 if (state.pokemons.length > index) {
+                 // print(state.pokemons[index].name);
                   return list_item(
-                      types: state.pokemons[index].types,
-                      name: state.pokemons[index].name,
+                      pokemon: list[index],
+                      types: list[index].types,
+                      name: list[index].name,
                       paddingPerSize: paddingPerSize,
                       pokemonSize: pokemonSize,
-                      url: state.pokemons[index].sprites.frontDefault);
+                      url: list[index].sprites.frontDefault);
                 } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return Shimmer.fromColors(
+                      baseColor: Colors.black54,
+                      highlightColor: Colors.white70,
+                      child: SingleChildScrollView(
+                          padding: EdgeInsets.all(paddingPerSize),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                      onPressed: () => {},
+                                      icon: const Icon(
+                                        Icons.favorite_border,
+                                        size: 20,
+                                        color: Colors.white,
+                                      )),
+                                  Text('#',
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w800,
+                                      )),
+                                ],
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  //Foto del pokemon:
+                                  Container(
+                                    // color: Colors.grey,
+                                    width: pokemonSize,
+                                    height: pokemonSize,
+                                    child: Center(
+                                        child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Transform.scale(
+                                          scale: 1.3,
+                                          child: CachedNetworkImage(
+                                            imageUrl: "",
+                                            fit: BoxFit.fill,
+                                            filterQuality: FilterQuality.none,
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Icon(Icons.error),
+                                          )),
+                                    )),
+                                  ),
+
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      FilledButton(
+                                        onPressed: null,
+                                        style: FilledButton.styleFrom(
+                                          padding: const EdgeInsets.all(12.0),
+                                        ),
+                                        child: Text(
+                                          "",
+                                          style: GoogleFonts.montserrat(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        "",
+                                        style: GoogleFonts.montserrat(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )));
                 }
               });
         } else {
-          print("cargando");
           return const Center(
             child: CircularProgressIndicator(),
           );

@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:proyectofinal/router.dart';
+import 'package:proyectofinal/sqflite.dart';
+import 'package:proyectofinal/states/cubit/listeners/app_cubit.dart';
 import 'package:proyectofinal/states/cubit/listeners/moves_cubit.dart';
 import 'package:proyectofinal/states/cubit/listeners/pokemon_cubit.dart';
 import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() {
   runApp(const MyApp());
+  DbInitializer.initialize();
   // await dotenv.load(fileName: ".env");
 }
 
@@ -39,7 +42,10 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => MovesCubit(),
-          )
+          ),
+          BlocProvider(
+            create: (context) => AppCubit()..changeTheme(0),
+          ),
         ],
         child: MaterialApp.router(
           routerConfig: router,

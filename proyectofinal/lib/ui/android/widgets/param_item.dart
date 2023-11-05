@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyectofinal/models/pokemon.dart';
+import 'package:proyectofinal/states/cubit/listeners/pokemon_cubit.dart';
+import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
 import 'package:proyectofinal/themes/pokemons_types.dart';
 
 class param_item extends StatefulWidget {
@@ -30,7 +33,12 @@ class _param_item extends State<param_item> {
     String types = '';
     Color card_color = Colors.lightBlue;
     return GestureDetector(
-        onTap: () => {/*Aplicar filtro en home */},
+        onTap: () => {
+          // Doesnt work, because some pokemons return null where the type is String
+              /*   context
+                  .read<ListCubit>()
+                  .filter_by_type(widget.title.toLowerCase()) */
+            },
         child: Card(
           elevation: 3,
           shape:
