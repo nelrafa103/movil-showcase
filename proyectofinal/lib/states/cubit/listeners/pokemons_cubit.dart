@@ -6,8 +6,6 @@ import 'package:proyectofinal/models/types.dart';
 import 'package:proyectofinal/sqflite.dart';
 import 'package:proyectofinal/states/list_state.dart';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 class ListCubit extends Cubit<ListState> {
   ListCubit() : super(ListInitial());
   var dio = Dio();
@@ -18,87 +16,71 @@ class ListCubit extends Cubit<ListState> {
    Aqui se podria reciclar un poco de codigo 
   */
   void fetch() async {
+    list.clear();
+    offset = 0;
     emit(ListLoading());
     try {
       String url =
           "https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}";
       var response = await dio.get(url);
       var data = ListLoaded.fromJson(response.data);
-      int index = 0;
-      list.sort((a, b) => a.id.compareTo(b.id));
-      var box = await Hive.openBox('pokemons');
-
       final future = data.results.map((element) async {
         var response2 = await dio.get(element.url);
         var pokemon = Pokemon.fromJson(response2.data);
         return pokemon;
       });
       final results = await Future.wait(future);
+
       list.addAll(results);
-
-      if (state is PopulatedList) {
-        //  print(list.length);
-      }
-
-      list.forEach((element) {
-        //    print(element.name);
-      });
-      /* Buscar letra por letra a ver si se encuentra algo */
-      emit(PopulatedList(pokemons: list));
-      limit += 20;
       offset += 20;
+      emit(PopulatedList(pokemons: list));
     } catch (e) {
       emit(ListError(e.toString()));
     }
   }
 
-  void addMore() async {
-    //limit, offset
+  Future<bool> addMore() async {
     try {
       String url =
           "https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}";
       var response = await dio.get(url);
       var data = ListLoaded.fromJson(response.data);
-      int index = 0;
       final future = data.results.map((element) async {
         var response2 = await dio.get(element.url);
         var pokemon = Pokemon.fromJson(response2.data);
-        //    print(pokemon.name);
         return pokemon;
       });
       final results = await Future.wait(future);
+      results.removeWhere((element) => list.contains(element));
       list.addAll(results);
-      emit(RepopulatedList(pokemons: list));
-      limit += 20;
       offset += 20;
+      emit(RepopulatedList(pokemons: list));
+      return true;
     } catch (e) {
-      print(e.toString());
       emit(ListError(e.toString()));
+      return false;
     }
   }
 
   void filter_by_name(String nombre) async {
     try {
-      list = [];
+      list.clear();
       List<String> name_list = DbInitializer.search(nombre);
-      if (name_list.length > 0) {
+      if (name_list.isNotEmpty) {
         final future = name_list.map((element) async {
-          print(element + "elemento");
           String url = "https://pokeapi.co/api/v2/pokemon/${element}";
-          print(url);
           var response = await dio.get(url);
           var data = Pokemon.fromJson(response.data);
-          print(data.name);
           return data;
         });
         final results = await Future.wait(future);
+        results.removeWhere((element) => list.contains(element));
         list.addAll(results);
         emit(RepopulatedList(pokemons: list));
       } else {
         String url = "https://pokeapi.co/api/v2/pokemon/${nombre}";
         var response = await dio.get(url);
         var data = Pokemon.fromJson(response.data);
-        int index = 0;
 
         list.add(data);
         emit(RepopulatedList(pokemons: list));
@@ -110,17 +92,15 @@ class ListCubit extends Cubit<ListState> {
 
   void filter_by_type(String type) async {
     list = [];
+    String url = "https://pokeapi.co/api/v2/type/${type}";
+
     try {
-      print(type);
-      String url = "https://pokeapi.co/api/v2/type/${type}";
       var response = await dio.get(url);
       var data = Types.fromJson(response.data);
 
-      print(data.pokemon.length);
       final future = data.pokemon.map((e) async {
         var response2 = await dio.get(e.pokemon.url);
         var pokemon = Pokemon.fromJson(response2.data);
-        print('${pokemon.name} + ' ' ${e.pokemon.url}');
         return pokemon;
       });
       final results = await Future.wait(future);

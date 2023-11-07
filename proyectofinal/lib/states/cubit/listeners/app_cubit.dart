@@ -4,7 +4,7 @@ import 'package:proyectofinal/states/app_state.dart';
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(AppInitial());
 
-  void changeTheme(int index) {
+  void changeTab(int index) {
     emit(AppLoaded(index: index));
   }
 }

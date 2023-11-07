@@ -36,9 +36,7 @@ class _list_item extends State<list_item> {
 
   @override
   void initState() {
-    print(widget.pokemon.name);
     isFav = DbInitializer.searchFav(widget.pokemon.name);
-    print(isFav);
     super.initState();
   }
 
@@ -64,10 +62,7 @@ class _list_item extends State<list_item> {
     }
 
     void funcion() {
-      // PokemonCubit()..providePokemon(widget.pokemon);
       context.read<PokemonCubit>()..providePokemon(widget.pokemon);
-
-      // print(widget.pokemon.name);
       GoRouter.of(context).go("/detalle");
     }
 

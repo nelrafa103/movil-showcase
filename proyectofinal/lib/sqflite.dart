@@ -8,7 +8,6 @@ class DbInitializer {
 
   static Future<void> initialize() async {
     Hive.init('/data/user/0/com.example.proyectofinal/app_flutter');
-    print("Hello");
     if (!Hive.isAdapterRegistered(1)) {
       Hive.registerAdapter(PokemonDaoAdapter());
     }
@@ -29,7 +28,7 @@ class DbInitializer {
       _box!.toMap().forEach((key, value) {
         if (value.name == pokemon.name) {
           exist = true;
-          _box!.delete(key);
+          //  _box!.delete(key);
         }
       });
 
@@ -44,7 +43,6 @@ class DbInitializer {
 
     if (_box2 != null) {
       _box2!.toMap().forEach((key, value) {
-        print(fav.name);
         if (value.name == fav.name) {
           exist = true;
           _box2!.delete(key);
@@ -58,13 +56,9 @@ class DbInitializer {
 
   static List<String> search(String param) {
     List<String> name_list = [];
-    //print(param);
     _box!.toMap().forEach((key, value) {
-      //  print(value.name.toString());
-      // print(value.name.toString().allMatches(param));
       if (value.name.toString().startsWith(param)) {
         name_list.add(value.name);
-        //print(value.name);
       }
     });
     return name_list;
@@ -72,17 +66,25 @@ class DbInitializer {
 
   static bool searchFav(String param) {
     bool isFav = false;
-    //print("Entrando a la busqueda");
     if (_box2 != null) {
       _box2!.toMap().forEach((key, value) {
-        // print(value.name.toString().allMatches(param));
         if (value.name == param) {
           isFav = true;
-          print('${value.name.toString()} por aqui esta');
         }
       });
     }
     return isFav;
+  }
+
+  static PokemonDao getPokemon(String name) {
+    // PokemonDao pokemon = PokemonDao(id: 0, name: "", url: "");
+    int index = 0;
+    _box!.toMap().forEach((key, value) {
+      if (value.name == name) {
+        index = value.id;
+      }
+    });
+    return PokemonDao(id: index, name: "", url: "");
   }
   // Other methods for insert, delete, update, etc.
 }

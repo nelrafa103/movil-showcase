@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
             create: (context) => MovesCubit(),
           ),
           BlocProvider(
-            create: (context) => AppCubit()..changeTheme(0),
+            create: (context) => AppCubit()..changeTab(0),
           ),
         ],
         child: MaterialApp.router(

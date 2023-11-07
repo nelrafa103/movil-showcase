@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyectofinal/states/app_state.dart';
 import 'package:proyectofinal/states/cubit/listeners/app_cubit.dart';
+import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
 
 class bottom_bar extends StatefulWidget {
   const bottom_bar({Key? key}) : super(key: key);
@@ -28,8 +29,11 @@ class _bottom_bar extends State<bottom_bar> {
           onDestinationSelected: (int index) {
             setState(() {
               currentPageIndex = index;
-              BlocProvider.of<AppCubit>(context).changeTheme(index);
+              BlocProvider.of<AppCubit>(context).changeTab(index);
               context.go(routes[index]);
+              if (index == 0) {
+                context.read<ListCubit>().fetch();
+              }
               //GoRouter.of(context).go(routes[index]);
             });
           },

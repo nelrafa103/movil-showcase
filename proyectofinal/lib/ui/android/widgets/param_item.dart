@@ -33,12 +33,7 @@ class _param_item extends State<param_item> {
     String types = '';
     Color card_color = Colors.lightBlue;
     return GestureDetector(
-        onTap: () => {
-          // Doesnt work, because some pokemons return null where the type is String
-              /*   context
-                  .read<ListCubit>()
-                  .filter_by_type(widget.title.toLowerCase()) */
-            },
+        onTap: () => {},
         child: Card(
           elevation: 3,
           shape:

@@ -2,13 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
-import 'package:proyectofinal/main.dart';
-import 'package:proyectofinal/models/hive/fav_dao.dart';
 import 'package:proyectofinal/models/hive/pokemon_dao.dart';
 import 'package:proyectofinal/models/pokemon.dart';
 import 'package:proyectofinal/sqflite.dart';
-import 'package:proyectofinal/states/cubit/listeners/pokemon_cubit.dart';
 import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
 import 'package:proyectofinal/states/list_state.dart';
 import 'package:proyectofinal/ui/android/widgets/bottom_bar.dart';
@@ -38,24 +34,16 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //  Future<Object> tal = prueba();
-    //  print(tal);
     controller = ScrollController();
 
-    controller.addListener(() {
-      // print(controller.position.maxScrollExtent);
-      // print(controller.offset);
+    controller.addListener(() async {
       if (controller.hasClients) {
         if (controller.position.maxScrollExtent == controller.offset) {
+          print("Llego al final");
           BlocProvider.of<ListCubit>(context).addMore();
-          print("llego al final");
-          //    ListCubit()..addMore();
         }
       }
     });
-    // var db = await DbInitilizer.initializeDb();
-
-    //final fetch = BlocProvider.of<ListCubit>(context).fetch();
   }
 
   @override
@@ -69,10 +57,6 @@ class _MyHomePageState extends State<MyHomePage> {
             child: CircularProgressIndicator(),
           );
         } else if (state is PopulatedList) {
-          List<Pokemon> list = state.pokemons;
-          list.sort((a, b) => a.id.compareTo(b.id));
-          // print(list[0]);
-
           return GridView.builder(
               controller: controller,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -81,25 +65,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisSpacing: 0,
                 childAspectRatio: 1.6,
               ),
-              itemCount:
-                  state.pokemons.length >= 20 ? state.pokemons.length : 20,
+              itemCount: state.pokemons.length,
               itemBuilder: (BuildContext context, int index) {
                 double screenHeight = MediaQuery.of(context).size.height;
                 double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
                 double pokemonSize = screenHeight > 600 ? 50 : 70;
                 if (state.pokemons.length > index) {
-                  //    print(list[index].id);
                   DbInitializer.insert(PokemonDao(
-                      name: list[index].name,
-                      id: list[index].id,
-                      url: list[index].sprites.frontDefault));
+                      name: state.pokemons[index].name,
+                      id: state.pokemons[index].id,
+                      url: state.pokemons[index].sprites.frontDefault));
                   return list_item(
-                      pokemon: list[index],
-                      types: list[index].types,
-                      name: list[index].name,
+                      pokemon: state.pokemons[index],
+                      types: state.pokemons[index].types,
+                      name: state.pokemons[index].name,
                       paddingPerSize: paddingPerSize,
                       pokemonSize: pokemonSize,
-                      url: list[index].sprites.frontDefault);
+                      url: state.pokemons[index].sprites.frontDefault);
                 } else {
                   return Shimmer.fromColors(
                       baseColor: Colors.black54,
@@ -192,13 +174,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               });
         } else if (state is ListError) {
-          print(state.message);
           return Center(child: Text(state.message));
         } else if (state is RepopulatedList) {
-          // print("cargando");
-          List<Pokemon> list = state.pokemons;
-          list.sort((a, b) => a.id.compareTo(b.id));
-
           return GridView.builder(
               controller: controller,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -207,111 +184,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisSpacing: 0,
                 childAspectRatio: 1.6,
               ),
-              itemCount:
-                  state.pokemons.length >= 20 ? state.pokemons.length : 20,
+              itemCount: state.pokemons.length,
               itemBuilder: (BuildContext context, int index) {
                 double screenHeight = MediaQuery.of(context).size.height;
                 double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
                 double pokemonSize = screenHeight > 600 ? 50 : 70;
-                if (state.pokemons.length > index) {
-                 // print(state.pokemons[index].name);
-                  return list_item(
-                      pokemon: list[index],
-                      types: list[index].types,
-                      name: list[index].name,
-                      paddingPerSize: paddingPerSize,
-                      pokemonSize: pokemonSize,
-                      url: list[index].sprites.frontDefault);
-                } else {
-                  return Shimmer.fromColors(
-                      baseColor: Colors.black54,
-                      highlightColor: Colors.white70,
-                      child: SingleChildScrollView(
-                          padding: EdgeInsets.all(paddingPerSize),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(
-                                      onPressed: () => {},
-                                      icon: const Icon(
-                                        Icons.favorite_border,
-                                        size: 20,
-                                        color: Colors.white,
-                                      )),
-                                  Text('#',
-                                      style: GoogleFonts.montserrat(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w800,
-                                      )),
-                                ],
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  //Foto del pokemon:
-                                  Container(
-                                    // color: Colors.grey,
-                                    width: pokemonSize,
-                                    height: pokemonSize,
-                                    child: Center(
-                                        child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Transform.scale(
-                                          scale: 1.3,
-                                          child: CachedNetworkImage(
-                                            imageUrl: "",
-                                            fit: BoxFit.fill,
-                                            filterQuality: FilterQuality.none,
-                                            progressIndicatorBuilder: (context,
-                                                    url, downloadProgress) =>
-                                                CircularProgressIndicator(
-                                                    value: downloadProgress
-                                                        .progress),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Icon(Icons.error),
-                                          )),
-                                    )),
-                                  ),
-
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      FilledButton(
-                                        onPressed: null,
-                                        style: FilledButton.styleFrom(
-                                          padding: const EdgeInsets.all(12.0),
-                                        ),
-                                        child: Text(
-                                          "",
-                                          style: GoogleFonts.montserrat(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        "",
-                                        style: GoogleFonts.montserrat(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )));
-                }
+                DbInitializer.insert(PokemonDao(
+                    name: state.pokemons[index].name,
+                    id: state.pokemons[index].id,
+                    url: state.pokemons[index].sprites.frontDefault));
+                return list_item(
+                    pokemon: state.pokemons[index],
+                    types: state.pokemons[index].types,
+                    name: state.pokemons[index].name,
+                    paddingPerSize: paddingPerSize,
+                    pokemonSize: pokemonSize,
+                    url: state.pokemons[index].sprites.frontDefault);
               });
         } else {
           return const Center(

@@ -14,4 +14,8 @@ class PokemonDao {
   String get getName => name;
   int get getId => id;
   String get getUrl => url;
+
+  set setName(String name) => name = name;
+  set setId(int id) => id = id;
+  set setUrl(String url) => url = url;
 }

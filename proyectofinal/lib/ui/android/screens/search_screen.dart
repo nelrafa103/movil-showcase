@@ -38,35 +38,22 @@ class _seach_screen extends State<seach_screen> {
     Param(title: "Fairy", url: "images/cleafairy.png", color: Fairy),
     Param(title: "Steel", url: "images/beldum.png", color: Steel),
     Param(title: "Ice", url: "images/snover.png", color: Ice),
+    Param(title: "Poison", url: "images/nidoran-f.png", color: Poison),
+    Param(title: "Ground", url: "images/diglett.png", color: Ground),
+    Param(title: "Psychic", url: "images/abra.png", color: Psychic),
+    Param(title: "Rock", url: "images/geodude.png", color: Rock),
   ];
 
   void redirect(String param) {
     /*
       Comprobar por nombre o por id 
     */
-    context.read<ListCubit>().fetch();
-    context.read<AppCubit>().changeTheme(0);
+
     GoRouter.of(context).go("/");
   }
 
   @override
   void initState() {
-    // TODO: implement initState
-    _searchController.addListener(() {
-      print(_searchController.text);
-
-      if (_searchController.text.contains("ditto") == true) {
-        //  _searchController.
-        print("DITTO");
-        context.read<ListCubit>()..filter_by_name(_searchController.text);
-
-        // context.read()<ListCubit>().filter_by_name("ditto");
-        GoRouter.of(context).go("/");
-      }
-      /* Hacer una busqueda */
-
-      // _searchController.
-    });
     super.initState();
   }
 
@@ -91,7 +78,7 @@ class _seach_screen extends State<seach_screen> {
             mainAxisSpacing: 0,
             childAspectRatio: 1.6,
           ),
-          itemCount: 10,
+          itemCount: 15,
           itemBuilder: (BuildContext context, int index) {
             double screenHeight = MediaQuery.of(context).size.height;
             double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
@@ -127,8 +114,9 @@ class CustomSearchBar extends SearchDelegate {
   Widget? buildLeading(BuildContext context) {
     return IconButton(
         onPressed: () {
-          GoRouter.of(context).go("/busqueda");
-          context.read<AppCubit>().changeTheme(3);
+          context.read<ListCubit>().fetch();
+          GoRouter.of(context).go("/");
+          context.read<AppCubit>().changeTab(0);
         },
         icon: Icon(Icons.arrow_back));
   }
@@ -154,6 +142,9 @@ class CustomSearchBar extends SearchDelegate {
         print(state.pokemons.length);
 
         List<Pokemon> list = state.pokemons;
+        Set<Pokemon> set = Set<Pokemon>.from(list);
+        List<Pokemon> result = set.toList();
+        list = result;
         //   list.sort((a, b) => a.id.compareTo(b.id));
 
         return GridView.builder(
@@ -169,7 +160,6 @@ class CustomSearchBar extends SearchDelegate {
               double screenHeight = MediaQuery.of(context).size.height;
               double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
               double pokemonSize = screenHeight > 600 ? 50 : 70;
-              //    print(list[index].id);
               return list_item(
                   pokemon: list[index],
                   types: list[index].types,
@@ -179,7 +169,6 @@ class CustomSearchBar extends SearchDelegate {
                   url: list[index].sprites.frontDefault);
             });
       } else if (state is ListError) {
-        print(state.message);
         return Center(child: Text(state.message));
       } else if (state is RepopulatedList) {
         //rprint("cargando");
