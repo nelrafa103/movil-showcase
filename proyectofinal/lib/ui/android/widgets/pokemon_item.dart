@@ -68,110 +68,112 @@ class _list_item extends State<list_item> {
 
     return GestureDetector(
         onTap: () => funcion(),
-        child: Card(
-          elevation: 3,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [card_color, card_color],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter)),
-            child: Padding(
-              padding: EdgeInsets.all(widget.paddingPerSize),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            DbInitializer.saveFavs(FavDao(
-                                name: widget.pokemon.name,
-                                id: widget.pokemon.id));
-                            changeIcon();
-                          },
-                          icon: isFav
-                              ? const Icon(
-                                  Icons.favorite,
-                                  size: 20,
-                                  color: Colors.red,
-                                )
-                              : const Icon(
-                                  Icons.favorite_border,
-                                  size: 20,
-                                  color: Colors.white,
-                                )),
-                      Text(
-                        types,
-                        style: GoogleFonts.montserrat(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                        ),
-                      ),
-                      Text('#${widget.pokemon.id.toString()}',
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Card(
+            elevation: 3,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [card_color.withAlpha(90), card_color.withAlpha(250)],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter)),
+              child: Padding(
+                padding: EdgeInsets.all(widget.paddingPerSize),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              DbInitializer.saveFavs(FavDao(
+                                  name: widget.pokemon.name,
+                                  id: widget.pokemon.id));
+                              changeIcon();
+                            },
+                            icon: isFav
+                                ? const Icon(
+                                    Icons.favorite,
+                                    size: 20,
+                                    color: Colors.red,
+                                  )
+                                : const Icon(
+                                    Icons.favorite_border,
+                                    size: 20,
+                                    color: Colors.white,
+                                  )),
+                        Text(
+                          types,
                           style: GoogleFonts.montserrat(
                             color: Colors.white,
+                            fontWeight: FontWeight.w500,
                             fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                          )),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      //Foto del pokemon:
-                      Container(
-                        // color: Colors.grey,
-                        width: widget.pokemonSize,
-                        height: widget.pokemonSize,
-                        child: Center(
-                            child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Transform.scale(
-                              scale: 1.3,
-                              child: CachedNetworkImage(
-                                imageUrl: widget.url,
-                                fit: BoxFit.fill,
-                                filterQuality: FilterQuality.none,
-                                progressIndicatorBuilder:
-                                    (context, url, downloadProgress) =>
-                                        CircularProgressIndicator(
-                                            value: downloadProgress.progress),
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
-                              )),
-                        )),
-                      ),
+                          ),
+                        ),
+                        Text('#${widget.pokemon.id.toString()}',
+                            style: GoogleFonts.montserrat(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                            )),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        //Foto del pokemon:
+                        Container(
+                          // color: Colors.grey,
+                          width: widget.pokemonSize + 20,
+                          height: widget.pokemonSize + 20,
+                          child: Center(
+                              child: Transform.scale(
+                                  scale: 1.0,
+                                  child: CachedNetworkImage(
+                                    imageUrl: widget.url,
+                                    fit: BoxFit.fill,
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            CircularProgressIndicator(
+                                                value: downloadProgress.progress),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  ))),
+                        ),
 
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          FilledButton(
-                            onPressed: null,
-                            style: FilledButton.styleFrom(
-                              padding: const EdgeInsets.all(13.0),
-                            ),
-                            child: Text(
-                              widget.name,
-                              style: GoogleFonts.montserrat(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            FilledButton(
+                              onPressed: null,
+                              style: FilledButton.styleFrom(
+                                padding: const EdgeInsets.all(13.0),
+                              ),
+                              child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: Text(
+                                  widget.name,
+                                  style: GoogleFonts.montserrat(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

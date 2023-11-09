@@ -2,6 +2,8 @@ import 'package:hive/hive.dart';
 import 'package:proyectofinal/models/hive/fav_dao.dart';
 import 'package:proyectofinal/models/hive/pokemon_dao.dart';
 
+
+//Inicialización de la base de datos no relacional (Hive)
 class DbInitializer {
   static Box? _box; // Declare a static Box
   static Box? _box2;
@@ -20,6 +22,7 @@ class DbInitializer {
     _box2 = await Hive.openBox("favs");
   }
 
+  //Función de insertar Pokemon en la base de datos
   static void insert(PokemonDao pokemon) {
     bool exist = false;
 
@@ -38,6 +41,7 @@ class DbInitializer {
     }
   }
 
+  //Función de guardar favoritos en la base de datos
   static void saveFavs(FavDao fav) {
     bool exist = false;
 
@@ -54,6 +58,7 @@ class DbInitializer {
     }
   }
 
+  //Función de busqueda en la base de datos
   static List<String> search(String param) {
     List<String> name_list = [];
     _box!.toMap().forEach((key, value) {
@@ -64,6 +69,7 @@ class DbInitializer {
     return name_list;
   }
 
+  //Función para buscar pokemon favorito en la base de datos
   static bool searchFav(String param) {
     bool isFav = false;
     if (_box2 != null) {
@@ -76,6 +82,7 @@ class DbInitializer {
     return isFav;
   }
 
+  //Función para obtener el pokemon utilizando el pokemonDao
   static PokemonDao getPokemon(String name) {
     // PokemonDao pokemon = PokemonDao(id: 0, name: "", url: "");
     int index = 0;
@@ -86,5 +93,6 @@ class DbInitializer {
     });
     return PokemonDao(id: index, name: "", url: "");
   }
-  // Other methods for insert, delete, update, etc.
+
+  // Métodos de delete, update... etc.
 }

@@ -10,6 +10,8 @@ import 'package:proyectofinal/ui/android/screens/moves_screen.dart';
 import 'package:proyectofinal/ui/android/screens/search_screen.dart';
 import 'package:proyectofinal/ui/android/screens/settings_screen.dart';
 
+//GoRouter programado para navegación entre pantallas
+//Se pusieron cada una de las rutuas bases para entrar a las pantallas de c/u
 GoRouter router = GoRouter(routes: <RouteBase>[
   GoRoute(
       path: "/",

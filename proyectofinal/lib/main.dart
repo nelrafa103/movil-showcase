@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() {
   runApp(const MyApp());
+  //Inicializando base de datos
   DbInitializer.initialize();
   // await dotenv.load(fileName: ".env");
 }
@@ -28,10 +29,13 @@ class MyApp extends StatelessWidget {
     if (!kIsWeb) {
       if (Platform.isIOS || Platform.isMacOS) {
         return CupertinoApp(
+          debugShowCheckedModeBanner: false,
           routes: {"/": (_) => MyHomePage("", title: "")},
         );
       }
     }
+
+    //Implementación de la lógica de negocios
     return MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -48,6 +52,7 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
           routerConfig: router,
         ));
   }

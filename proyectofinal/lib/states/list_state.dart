@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:proyectofinal/models/pokemon.dart';
 
+//Estado de la lista
 abstract class ListState {}
 
 class ListInitial extends ListState {}
@@ -14,10 +15,10 @@ ListLoaded ListLoadedFromJson(String str) =>
 String ListLoadedToJson(ListLoaded data) => json.encode(data.toJson());
 
 class ListLoaded extends ListState {
-  int count;
-  String next;
-  dynamic previous;
-  List<Result> results;
+  int count; //Cant. de elementos en la lista.
+  String next; //Enlace hacia el siguiente conjunto de datos
+  dynamic previous; //Enlace hacia el conjunto de datos anterior
+  List<Result> results; //Lista de resultados
 
   ListLoaded({
     required this.count,
@@ -68,6 +69,7 @@ class ListError extends ListState {
   ListError(this.message);
 }
 
+//Lista populada de pokemons
 class PopulatedList extends ListState {
   final List<Pokemon> pokemons;
 

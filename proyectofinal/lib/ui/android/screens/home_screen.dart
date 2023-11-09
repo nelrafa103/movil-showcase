@@ -74,14 +74,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   DbInitializer.insert(PokemonDao(
                       name: state.pokemons[index].name,
                       id: state.pokemons[index].id,
-                      url: state.pokemons[index].sprites.frontDefault));
+                      url: state.pokemons[index].sprites.other!.officialArtwork.frontDefault));
                   return list_item(
                       pokemon: state.pokemons[index],
                       types: state.pokemons[index].types,
                       name: state.pokemons[index].name,
                       paddingPerSize: paddingPerSize,
                       pokemonSize: pokemonSize,
-                      url: state.pokemons[index].sprites.frontDefault);
+                      url: state.pokemons[index].sprites.other!.officialArtwork.frontDefault);
                 } else {
                   return Shimmer.fromColors(
                       baseColor: Colors.black54,
@@ -119,24 +119,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                     width: pokemonSize,
                                     height: pokemonSize,
                                     child: Center(
-                                        child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Transform.scale(
-                                          scale: 1.3,
-                                          child: CachedNetworkImage(
-                                            imageUrl: "",
-                                            fit: BoxFit.fill,
-                                            filterQuality: FilterQuality.none,
-                                            progressIndicatorBuilder: (context,
-                                                    url, downloadProgress) =>
-                                                CircularProgressIndicator(
-                                                    value: downloadProgress
-                                                        .progress),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Icon(Icons.error),
-                                          )),
-                                    )),
+                                        child: Transform.scale(
+                                            scale: 1.0,
+                                            child: CachedNetworkImage(
+                                              imageUrl: "",
+                                              fit: BoxFit.fill,
+                                              progressIndicatorBuilder: (context,
+                                                      url, downloadProgress) =>
+                                                  CircularProgressIndicator(
+                                                      value: downloadProgress
+                                                          .progress),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                            ))),
                                   ),
 
                                   Column(
@@ -192,14 +188,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 DbInitializer.insert(PokemonDao(
                     name: state.pokemons[index].name,
                     id: state.pokemons[index].id,
-                    url: state.pokemons[index].sprites.frontDefault));
+                    url: state.pokemons[index].sprites.other!.officialArtwork.frontDefault));
                 return list_item(
                     pokemon: state.pokemons[index],
                     types: state.pokemons[index].types,
                     name: state.pokemons[index].name,
                     paddingPerSize: paddingPerSize,
                     pokemonSize: pokemonSize,
-                    url: state.pokemons[index].sprites.frontDefault);
+                    url: state.pokemons[index].sprites.other!.officialArtwork.frontDefault);
               });
         } else {
           return const Center(

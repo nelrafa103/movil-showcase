@@ -166,7 +166,7 @@ class CustomSearchBar extends SearchDelegate {
                   name: list[index].name,
                   paddingPerSize: paddingPerSize,
                   pokemonSize: pokemonSize,
-                  url: list[index].sprites.frontDefault);
+                  url: list[index].sprites.other!.officialArtwork.frontDefault);
             });
       } else if (state is ListError) {
         return Center(child: Text(state.message));
@@ -194,7 +194,7 @@ class CustomSearchBar extends SearchDelegate {
                   name: list[index].name,
                   paddingPerSize: paddingPerSize,
                   pokemonSize: pokemonSize,
-                  url: list[index].sprites.frontDefault);
+                  url: list[index].sprites.other!.officialArtwork.frontDefault);
             });
       } else {
         return const Center(
