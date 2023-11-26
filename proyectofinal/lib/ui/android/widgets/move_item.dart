@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-class move_item extends StatefulWidget {
-  const move_item({Key? key}) : super(key: key);
+class MoveWidget extends StatefulWidget {
+  const MoveWidget({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _move_item();
+    return _MoveWidget();
   }
 }
 
-class _move_item extends State<move_item> {
+class _MoveWidget extends State<MoveWidget> {
   @override
   Widget build(BuildContext context) {
-    return  Card(
-       child: Row(
+    return Card(
+      child: Row(
         children: [
           Column(
             children: [
@@ -30,8 +30,7 @@ class _move_item extends State<move_item> {
             children: [],
           )
         ],
-       ),
-
+      ),
     );
   }
 }

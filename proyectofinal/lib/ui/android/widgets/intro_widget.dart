@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class intro extends StatelessWidget {
-  const intro({Key? key}) : super(key: key);
+class IntroWidget extends StatelessWidget {
+  const IntroWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

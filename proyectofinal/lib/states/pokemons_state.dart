@@ -2,31 +2,31 @@ import 'dart:convert';
 
 import 'package:proyectofinal/models/pokemon.dart';
 
-abstract class ListState {}
+abstract class PokemonsState {}
 
-class ListInitial extends ListState {}
+class PokemonsInitial extends PokemonsState {}
 
-class ListLoading extends ListState {}
+class PokemonsLoading extends PokemonsState {}
 
-ListLoaded ListLoadedFromJson(String str) =>
-    ListLoaded.fromJson(json.decode(str));
+PokemonsLoaded PokemonsLoadedFromJson(String str) =>
+    PokemonsLoaded.fromJson(json.decode(str));
 
-String ListLoadedToJson(ListLoaded data) => json.encode(data.toJson());
+String PokemonsLoadedToJson(PokemonsLoaded data) => json.encode(data.toJson());
 
-class ListLoaded extends ListState {
+class PokemonsLoaded extends PokemonsState {
   int count;
   String next;
   dynamic previous;
   List<Result> results;
 
-  ListLoaded({
+  PokemonsLoaded({
     required this.count,
     required this.next,
     required this.previous,
     required this.results,
   });
 
-  factory ListLoaded.fromJson(Map<String, dynamic> json) => ListLoaded(
+  factory PokemonsLoaded.fromJson(Map<String, dynamic> json) => PokemonsLoaded(
         count: json["count"],
         next: json["next"],
         previous: json["previous"],
@@ -62,26 +62,18 @@ class Result {
       };
 }
 
-class ListError extends ListState {
+class PokemonsError extends PokemonsState {
   final String message;
 
-  ListError(this.message);
+  PokemonsError(this.message);
 }
 
-class PopulatedList extends ListState {
+class PopulatedPokemons extends PokemonsState {
   final List<Pokemon> pokemons;
 
-  PopulatedList({required this.pokemons});
+  PopulatedPokemons({required this.pokemons});
 
   void add(Pokemon pokemon) {
     pokemons.add(pokemon);
   }
-}
-
-class RepopulatedList extends ListState {
-  final List<Pokemon> pokemons;
-
-  RepopulatedList({required this.pokemons});
-
-
 }

@@ -77,7 +77,6 @@ class DbInitializer {
   }
 
   static PokemonDao getPokemon(String name) {
-    // PokemonDao pokemon = PokemonDao(id: 0, name: "", url: "");
     int index = 0;
     _box!.toMap().forEach((key, value) {
       if (value.name == name) {
@@ -86,5 +85,4 @@ class DbInitializer {
     });
     return PokemonDao(id: index, name: "", url: "");
   }
-  // Other methods for insert, delete, update, etc.
 }

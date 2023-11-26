@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:proyectofinal/ui/android/widgets/bottom_bar.dart';
+import 'package:proyectofinal/ui/android/widgets/bottom_bar_widget.dart';
 
-class settings_screen extends StatefulWidget {
-  const settings_screen({Key? key}) : super(key: key);
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _settings_screen();
+    return _SettingsScreen();
   }
 }
 
-class _settings_screen extends State<settings_screen> {
+class _SettingsScreen extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
         children: [],
       ),
-      bottomNavigationBar: bottom_bar(),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }

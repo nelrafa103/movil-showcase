@@ -1,61 +1,27 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:proyectofinal/models/param.dart';
-import 'package:proyectofinal/models/pokemon.dart';
-import 'package:proyectofinal/states/cubit/listeners/app_cubit.dart';
-import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
-import 'package:proyectofinal/states/list_state.dart';
-import 'package:proyectofinal/themes/pokemons_types.dart';
-import 'package:proyectofinal/ui/android/widgets/bottom_bar.dart';
-import 'package:proyectofinal/ui/android/widgets/param_item.dart';
-import 'package:proyectofinal/ui/android/widgets/pokemon_item.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:proyectofinal/shared/pokemon.dart';
+import 'package:proyectofinal/states/cubit/app_cubit.dart';
+import 'package:proyectofinal/states/cubit/pokemons_cubit.dart';
+import 'package:proyectofinal/states/pokemons_state.dart';
+import 'package:proyectofinal/ui/android/widgets/bottom_bar_widget.dart';
+import 'package:proyectofinal/ui/android/widgets/filter_widget.dart';
+import 'package:proyectofinal/ui/android/widgets/pokemon_widget.dart';
 
-class seach_screen extends StatefulWidget {
-  const seach_screen({Key? key}) : super(key: key);
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _seach_screen();
+    return _SearchScreen();
   }
 }
 
-class _seach_screen extends State<seach_screen> {
-  final TextEditingController _searchController = TextEditingController();
-
+class _SearchScreen extends State<SearchScreen> {
   bool filtro = false;
-  List<Param> param_list = [
-    Param(
-      id: 12,
-      title: "Grass",
-      url: "images/bulbassur.png",
-      color: Grass,
-    ),
-    Param(id: 10, title: "Fire", url: "images/chamander.png", color: Fire),
-    Param(id: 11, title: "Water", url: "images/squirtle.png", color: Water),
-    Param(id: 7, title: "Bug", url: "images/caterpie.png", color: Bug),
-    Param(id: 1, title: "Normal", url: "images/rattata.png", color: Normal),
-    Param(id: 3, title: "Flying", url: "images/pidgey.png", color: Flying),
-    Param(
-        id: 13, title: "Electric", url: "images/pikachu.png", color: Electric),
-    Param(id: 2, title: "Fighting", url: "images/mankey.png", color: Fighting),
-    Param(id: 18, title: "Fairy", url: "images/cleafairy.png", color: Fairy),
-    Param(id: 9, title: "Steel", url: "images/beldum.png", color: Steel),
-    Param(id: 15, title: "Ice", url: "images/snover.png", color: Ice),
-    Param(id: 4, title: "Poison", url: "images/nidoran-f.png", color: Poison),
-    Param(id: 5, title: "Ground", url: "images/diglett.png", color: Ground),
-    Param(id: 14, title: "Psychic", url: "images/abra.png", color: Psychic),
-    Param(id: 6, title: "Rock", url: "images/geodude.png", color: Rock),
-  ];
 
   void redirect(String param) {
-    /*
-      Comprobar por nombre o por id 
-    */
-
     GoRouter.of(context).go("/");
   }
 
@@ -77,7 +43,8 @@ class _seach_screen extends State<seach_screen> {
               icon: const Icon(Icons.search))
         ],
       ),
-      body: BlocBuilder<ListCubit, ListState>(builder: ((context, state) {
+      body:
+          BlocBuilder<PokemonsCubit, PokemonsState>(builder: ((context, state) {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -93,25 +60,27 @@ class _seach_screen extends State<seach_screen> {
 
             return GestureDetector(
                 onTap: () async => {
-                      await BlocProvider.of<ListCubit>(context)
-                          .filter_by_type(param_list[index].id)
+                      await BlocProvider.of<PokemonsCubit>(context)
+                          .filterByType(paramList[index].id)
                           .then((value) => showSearch(
                               context: context, delegate: CustomSearchBar())),
                     },
-                child: param_item(
-                    param: param_list[index],
-                    color: param_list[index].color,
+                child: FilterWidget(
+                    param: paramList[index],
+                    color: paramList[index].color,
                     paddingPerSize: paddingPerSize,
                     pokemonSize: pokemonSize));
           },
         );
       })),
-      bottomNavigationBar: const bottom_bar(),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }
 
 class CustomSearchBar extends SearchDelegate {
+  ScrollController controller = ScrollController();
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -127,7 +96,7 @@ class CustomSearchBar extends SearchDelegate {
   Widget? buildLeading(BuildContext context) {
     return IconButton(
         onPressed: () {
-          context.read<ListCubit>().fetch();
+          context.read<PokemonsCubit>().fetch();
           GoRouter.of(context).go("/");
           context.read<AppCubit>().changeTab(0);
         },
@@ -143,77 +112,40 @@ class CustomSearchBar extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    BlocProvider.of<ListCubit>(context).filter_by_name(query);
-    return BlocConsumer<ListCubit, ListState>(listener: (context, state) {
-      if (state is RepopulatedList) {}
-    }, builder: (context, state) {
-      if (state is ListLoading) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      } else if (state is PopulatedList) {
-        print(state.pokemons.length);
+    BlocProvider.of<PokemonsCubit>(context).filterByName(query);
+    return BlocConsumer<PokemonsCubit, PokemonsState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          if (state is PopulatedPokemons) {
+            return GridView.builder(
+                controller: controller,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 0,
+                  mainAxisSpacing: 0,
+                  childAspectRatio: 1.6,
+                ),
+                itemCount: state.pokemons.length,
+                itemBuilder: (BuildContext context, int index) {
+                  double screenHeight = MediaQuery.of(context).size.height;
+                  double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
+                  double pokemonSize = screenHeight > 600 ? 50 : 70;
 
-        List<Pokemon> list = state.pokemons;
-        Set<Pokemon> set = Set<Pokemon>.from(list);
-        List<Pokemon> result = set.toList();
-        list = result;
-        //   list.sort((a, b) => a.id.compareTo(b.id));
-
-        return GridView.builder(
-            //   controller: controller,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 0,
-              mainAxisSpacing: 0,
-              childAspectRatio: 1.6,
-            ),
-            itemCount: state.pokemons.length,
-            itemBuilder: (BuildContext context, int index) {
-              double screenHeight = MediaQuery.of(context).size.height;
-              double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
-              double pokemonSize = screenHeight > 600 ? 50 : 70;
-              return list_item(
-                  pokemon: list[index],
-                  types: list[index].types,
-                  name: list[index].name,
-                  paddingPerSize: paddingPerSize,
-                  pokemonSize: pokemonSize,
-                  url: list[index].sprites.frontDefault);
-            });
-      } else if (state is ListError) {
-        return Center(child: Text(state.message));
-      } else if (state is RepopulatedList) {
-        //rprint("cargando");
-        List<Pokemon> list = state.pokemons;
-        //   list.sort((a, b) => a.id.compareTo(b.id));
-
-        print(state.pokemons.length);
-        return GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 0,
-              mainAxisSpacing: 0,
-              childAspectRatio: 1.6,
-            ),
-            itemCount: state.pokemons.length,
-            itemBuilder: (BuildContext context, int index) {
-              double screenHeight = MediaQuery.of(context).size.height;
-              double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
-              double pokemonSize = screenHeight > 600 ? 50 : 70;
-              return list_item(
-                  pokemon: list[index],
-                  types: list[index].types,
-                  name: list[index].name,
-                  paddingPerSize: paddingPerSize,
-                  pokemonSize: pokemonSize,
-                  url: list[index].sprites.frontDefault);
-            });
-      } else {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-    });
+                  return PokemonWidget(
+                      pokemon: state.pokemons[index],
+                      types: state.pokemons[index].types,
+                      name: state.pokemons[index].name,
+                      paddingPerSize: paddingPerSize,
+                      pokemonSize: pokemonSize,
+                      url: state.pokemons[index].sprites.frontDefault);
+                });
+          } else if (state is PokemonsError) {
+            return Text(state.message);
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 }

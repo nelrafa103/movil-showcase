@@ -5,11 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyectofinal/models/hive/fav_dao.dart';
 import 'package:proyectofinal/models/pokemon.dart';
-import 'package:proyectofinal/sqflite.dart';
-import 'package:proyectofinal/states/cubit/listeners/pokemon_cubit.dart';
+import 'package:proyectofinal/hive.dart';
+import 'package:proyectofinal/states/cubit/pokemon_cubit.dart';
 import 'package:proyectofinal/themes/pokemons_types.dart';
 
-class list_item extends StatefulWidget {
+class PokemonWidget extends StatefulWidget {
   final String name;
   final Pokemon pokemon;
   final List<Type> types;
@@ -17,7 +17,7 @@ class list_item extends StatefulWidget {
   final double paddingPerSize;
   final double pokemonSize;
 
-  const list_item(
+  const PokemonWidget(
       {super.key,
       required this.pokemon,
       required this.name,
@@ -27,11 +27,11 @@ class list_item extends StatefulWidget {
       required this.pokemonSize});
   @override
   State<StatefulWidget> createState() {
-    return _list_item();
+    return _PokemonWidget();
   }
 }
 
-class _list_item extends State<list_item> {
+class _PokemonWidget extends State<PokemonWidget> {
   bool isFav = false;
 
   @override
@@ -62,7 +62,7 @@ class _list_item extends State<list_item> {
     }
 
     void funcion() {
-      context.read<PokemonCubit>()..providePokemon(widget.pokemon);
+      context.read<PokemonCubit>().providePokemon(widget.pokemon);
       GoRouter.of(context).go("/detalle");
     }
 
@@ -126,9 +126,7 @@ class _list_item extends State<list_item> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      //Foto del pokemon:
-                      Container(
-                        // color: Colors.grey,
+                      SizedBox(
                         width: widget.pokemonSize,
                         height: widget.pokemonSize,
                         child: Center(
@@ -145,11 +143,10 @@ class _list_item extends State<list_item> {
                                         CircularProgressIndicator(
                                             value: downloadProgress.progress),
                                 errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
+                                    const Icon(Icons.error),
                               )),
                         )),
                       ),
-
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -159,7 +156,8 @@ class _list_item extends State<list_item> {
                               padding: const EdgeInsets.all(13.0),
                             ),
                             child: Text(
-                              widget.name,
+                              widget.name[0].toUpperCase() +
+                                  widget.name.substring(1),
                               style: GoogleFonts.montserrat(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,

@@ -2,28 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyectofinal/states/app_state.dart';
-import 'package:proyectofinal/states/cubit/listeners/app_cubit.dart';
-import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
+import 'package:proyectofinal/states/cubit/app_cubit.dart';
+import 'package:proyectofinal/states/cubit/pokemons_cubit.dart';
 
-class bottom_bar extends StatefulWidget {
-  const bottom_bar({Key? key}) : super(key: key);
+class BottomBar extends StatefulWidget {
+  const BottomBar({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _bottom_bar();
+    return _BottomBar();
   }
 }
 
-class _bottom_bar extends State<bottom_bar> {
+class _BottomBar extends State<BottomBar> {
   int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     List<String> routes = ["/", "/habilidades", "/busqueda", "/configuracion"];
     return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
       if (state is AppLoaded) {
-        print(state.index);
         currentPageIndex = state.index;
         return NavigationBar(
           onDestinationSelected: (int index) {
@@ -32,9 +30,8 @@ class _bottom_bar extends State<bottom_bar> {
               BlocProvider.of<AppCubit>(context).changeTab(index);
               context.go(routes[index]);
               if (index == 0) {
-                context.read<ListCubit>().fetch();
+                context.read<PokemonsCubit>().fetch();
               }
-              //GoRouter.of(context).go(routes[index]);
             });
           },
           selectedIndex: currentPageIndex,
@@ -60,6 +57,5 @@ class _bottom_bar extends State<bottom_bar> {
       }
       return Container();
     });
-    // throw UnimplementedError();
   }
 }

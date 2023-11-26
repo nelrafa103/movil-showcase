@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
-class pokemon_item_shimmer extends StatelessWidget {
-  const pokemon_item_shimmer({super.key});
+class PokemonShimmerWidget extends StatelessWidget {
+  const PokemonShimmerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class pokemon_item_shimmer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     //Foto del pokemon:
-                    Container(
+                    SizedBox(
                       width: pokemonSize,
                       height: pokemonSize,
                       child: Center(
@@ -58,7 +58,7 @@ class pokemon_item_shimmer extends StatelessWidget {
                                       CircularProgressIndicator(
                                           value: downloadProgress.progress),
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                             )),
                       )),
                     ),

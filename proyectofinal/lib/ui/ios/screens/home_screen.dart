@@ -1,10 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
-import 'package:proyectofinal/states/list_state.dart';
-import 'package:proyectofinal/ui/android/widgets/bottom_bar.dart';
-import 'package:proyectofinal/ui/android/widgets/pokemon_item.dart';
+import 'package:proyectofinal/states/cubit/pokemons_cubit.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage(String s, {super.key, required this.title});
@@ -26,7 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final fetch = BlocProvider.of<ListCubit>(context).fetch();
+    final fetch = BlocProvider.of<PokemonsCubit>(context).fetch();
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         items: const <BottomNavigationBarItem>[

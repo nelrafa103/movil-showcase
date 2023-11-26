@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyectofinal/models/param.dart';
-import 'package:proyectofinal/models/pokemon.dart';
-import 'package:proyectofinal/states/cubit/listeners/pokemon_cubit.dart';
-import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
-import 'package:proyectofinal/themes/pokemons_types.dart';
 
-class param_item extends StatefulWidget {
+class FilterWidget extends StatefulWidget {
   final double paddingPerSize;
   final double pokemonSize;
   final Color color;
   final Param param;
-  const param_item(
+  const FilterWidget(
       {super.key,
       required this.param,
       required this.paddingPerSize,
@@ -21,15 +15,14 @@ class param_item extends StatefulWidget {
       required this.color});
   @override
   State<StatefulWidget> createState() {
-    return _param_item();
+    return _FilterWidget();
   }
 }
 
-class _param_item extends State<param_item> {
+class _FilterWidget extends State<FilterWidget> {
   @override
   Widget build(BuildContext context) {
     String types = '';
-    Color card_color = Colors.lightBlue;
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

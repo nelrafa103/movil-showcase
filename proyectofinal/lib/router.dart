@@ -1,11 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:proyectofinal/models/pokemon.dart';
-import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
-import 'package:proyectofinal/ui/android/screens/detail_screen.dart';
+import 'package:proyectofinal/ui/android/screens/pokemon_detail_screen.dart';
 import 'package:proyectofinal/ui/android/screens/home_screen.dart';
-import 'package:proyectofinal/ui/android/screens/login_screen.dart';
 import 'package:proyectofinal/ui/android/screens/moves_screen.dart';
 import 'package:proyectofinal/ui/android/screens/search_screen.dart';
 import 'package:proyectofinal/ui/android/screens/settings_screen.dart';
@@ -16,21 +11,19 @@ GoRouter router = GoRouter(routes: <RouteBase>[
       routes: <RouteBase>[
         GoRoute(
           path: "configuracion",
-          builder: (context, state) => settings_screen(),
+          builder: (context, state) => const SettingsScreen(),
         ),
         GoRoute(
           path: "habilidades",
-          builder: (context, state) => moves_screen(),
+          builder: (context, state) => const MoveScreen(),
         ),
         GoRoute(
           path: "detalle",
-          builder: (context, state) => PokemonDetail(
-              //  pokemon: state.extra as Pokemon,
-              ),
+          builder: (context, state) => const PokemonDetailScreen(),
         ),
         GoRoute(
           path: "busqueda",
-          builder: (context, state) => seach_screen(),
+          builder: (context, state) => const SearchScreen(),
         )
       ],
       builder: (context, state) => const MyHomePage(
