@@ -9,6 +9,7 @@ import 'package:proyectofinal/states/cubit/listeners/pokemons_cubit.dart';
 import 'package:proyectofinal/states/list_state.dart';
 import 'package:proyectofinal/ui/android/widgets/bottom_bar.dart';
 import 'package:proyectofinal/ui/android/widgets/pokemon_item.dart';
+import 'package:proyectofinal/ui/android/widgets/shimmers/pokemon_item.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -32,14 +33,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     controller = ScrollController();
 
     controller.addListener(() async {
       if (controller.hasClients) {
         if (controller.position.maxScrollExtent == controller.offset) {
-          print("Llego al final");
           BlocProvider.of<ListCubit>(context).addMore();
         }
       }
@@ -83,94 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       pokemonSize: pokemonSize,
                       url: state.pokemons[index].sprites.frontDefault);
                 } else {
-                  return Shimmer.fromColors(
-                      baseColor: Colors.black54,
-                      highlightColor: Colors.white70,
-                      child: SingleChildScrollView(
-                          padding: EdgeInsets.all(paddingPerSize),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(
-                                      onPressed: () => {},
-                                      icon: const Icon(
-                                        Icons.favorite_border,
-                                        size: 20,
-                                        color: Colors.white,
-                                      )),
-                                  Text('#',
-                                      style: GoogleFonts.montserrat(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w800,
-                                      )),
-                                ],
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  //Foto del pokemon:
-                                  Container(
-                                    // color: Colors.grey,
-                                    width: pokemonSize,
-                                    height: pokemonSize,
-                                    child: Center(
-                                        child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Transform.scale(
-                                          scale: 1.3,
-                                          child: CachedNetworkImage(
-                                            imageUrl: "",
-                                            fit: BoxFit.fill,
-                                            filterQuality: FilterQuality.none,
-                                            progressIndicatorBuilder: (context,
-                                                    url, downloadProgress) =>
-                                                CircularProgressIndicator(
-                                                    value: downloadProgress
-                                                        .progress),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Icon(Icons.error),
-                                          )),
-                                    )),
-                                  ),
-
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      FilledButton(
-                                        onPressed: null,
-                                        style: FilledButton.styleFrom(
-                                          padding: const EdgeInsets.all(12.0),
-                                        ),
-                                        child: Text(
-                                          "",
-                                          style: GoogleFonts.montserrat(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        "",
-                                        style: GoogleFonts.montserrat(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )));
+                  return pokemon_item_shimmer();
                 }
               });
         } else if (state is ListError) {
