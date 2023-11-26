@@ -48,6 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    int crossAxisCount = MediaQuery.of(context).size.width > 600 ? 3 : 2;
+
     return Scaffold(
       body: BlocConsumer<ListCubit, ListState>(listener: (context, state) {
         if (state is RepopulatedList) {}
@@ -68,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: state.pokemons.length,
               itemBuilder: (BuildContext context, int index) {
                 double screenHeight = MediaQuery.of(context).size.height;
-                double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
+                double paddingPerSize = screenHeight > 600 ? 18.0 : 50.0;
                 double pokemonSize = screenHeight > 600 ? 50 : 70;
                 if (state.pokemons.length > index) {
                   DbInitializer.insert(PokemonDao(
