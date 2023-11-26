@@ -93,11 +93,11 @@ class _seach_screen extends State<seach_screen> {
 
             return GestureDetector(
                 onTap: () async => {
-                      await BlocProvider.of<ListCubit>(context)
-                          .filter_by_type(param_list[index].id)
-                          .then((value) => showSearch(
-                              context: context, delegate: CustomSearchBar())),
-                    },
+                  await BlocProvider.of<ListCubit>(context)
+                      .filter_by_type(param_list[index].id)
+                      .then((value) => showSearch(
+                      context: context, delegate: CustomSearchBar())),
+                },
                 child: param_item(
                     param: param_list[index],
                     color: param_list[index].color,
@@ -161,7 +161,7 @@ class CustomSearchBar extends SearchDelegate {
         //   list.sort((a, b) => a.id.compareTo(b.id));
 
         return GridView.builder(
-            //   controller: controller,
+          //   controller: controller,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 0,
@@ -179,7 +179,7 @@ class CustomSearchBar extends SearchDelegate {
                   name: list[index].name,
                   paddingPerSize: paddingPerSize,
                   pokemonSize: pokemonSize,
-                  url: list[index].sprites.other!.officialArtwork.frontDefault);
+                  url: list[index].sprites.other?.officialArtwork.frontDefault ?? "");
             });
       } else if (state is ListError) {
         return Center(child: Text(state.message));
@@ -207,7 +207,7 @@ class CustomSearchBar extends SearchDelegate {
                   name: list[index].name,
                   paddingPerSize: paddingPerSize,
                   pokemonSize: pokemonSize,
-                  url: list[index].sprites.other!.officialArtwork.frontDefault);
+                  url: list[index].sprites.other?.officialArtwork.frontDefault ?? "");
             });
       } else {
         return const Center(

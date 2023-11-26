@@ -65,7 +65,7 @@ class _list_item extends State<list_item> {
       // }
 
       typePokemon = 'images/Type=${widget.types[i].type.name}.svg';
-      svgTypeIcon = SvgPicture.asset(typePokemon, semanticsLabel: 'Tipo de Pokemon: ${widget.types[i].type.name}');
+      svgTypeIcon = SvgPicture.asset(typePokemon, semanticsLabel: 'Tipo de Pokemon: ${widget.types[i].type.name}', width: MediaQuery.of(context).size.width > 600 ? 75 : 40,);
       pokemonTypes.add(svgTypeIcon);
 
     }
@@ -91,7 +91,7 @@ class _list_item extends State<list_item> {
     return GestureDetector(
         onTap: () => funcion(),
         child: Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(2.0),
           child: Card(
             elevation: 3,
             shape:
@@ -105,41 +105,19 @@ class _list_item extends State<list_item> {
                       colors: [cardColor.withOpacity(0.6), cardColor.withOpacity(1)],
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter)),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: IconButton(
-                              onPressed: () {
-                                DbInitializer.saveFavs(FavDao(
-                                    name: widget.pokemon.name,
-                                    id: widget.pokemon.id));
-                                changeIcon();
-                              },
-                              icon: isFav
-                                  ? const Icon(
-                                Icons.favorite,
-                                size: 20,
-                                color: Colors.white,
-                              )
-                                  : const Icon(
-                                Icons.favorite_border,
-                                size: 20,
-                                color: Colors.white,
-                              )
-                          ),
-                        ),
+              child: Padding(
+                padding: EdgeInsets.all(MediaQuery.of(context).size.width > 600 ? kPaddingValue * 2 : 4),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Stack(
+                        children: [
 
-                        //Foto del pokemon:
-                        Padding(
-                          padding: EdgeInsets.only(left: kPaddingValue, bottom: kPaddingValue),
-                          child: Align(
+                          //Foto del pokemon:
+                          Align(
                             alignment: Alignment.bottomCenter,
                             child: Transform.scale(
-                                scale: MediaQuery.of(context).size.width > 600 ? 1.5 : 1.3,
+                                scale: MediaQuery.of(context).size.width > 600 ? 1.5 : 1.1,
                                 child: CachedNetworkImage(
                                   imageUrl: widget.url,
                                   fit: BoxFit.fill,
@@ -152,67 +130,93 @@ class _list_item extends State<list_item> {
                                 )
                             ),
                           ),
-                        ),
 
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
 
-                  Expanded(
-                    flex: MediaQuery.of(context).size.width > 600 ? 2 : 1,
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(MediaQuery.of(context).size.width > 600 ? kPaddingValue * 2 : kPaddingValue),
-                          child: Align(
+                    Expanded(
+                      flex: MediaQuery.of(context).size.width > 600 ? 2 : 1,
+                      child: Stack(
+                        children: [
+                          Align(
                             alignment: Alignment.topRight,
-                            child: Text('#${widget.pokemon.id.toString()}',
-                                style: GoogleFonts.montserrat(
-                                  color: Colors.white,
-                                  fontSize: MediaQuery.of(context).size.width > 600 ? kFontSizeValue * 2 : kFontSizeValue,
-                                  fontWeight: FontWeight.w700,)
+                            child: Padding(
+                              padding: EdgeInsets.only(right: MediaQuery.of(context).size.width > 600 ? kPaddingValue * 2 : kPaddingValue ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        DbInitializer.saveFavs(FavDao(
+                                            name: widget.pokemon.name,
+                                            id: widget.pokemon.id));
+                                        changeIcon();
+                                      },
+                                      icon: isFav
+                                          ? const Icon(
+                                        Icons.favorite,
+                                        size: kFontSizeValue + 5,
+                                        color: Colors.white,
+                                      )
+                                          : const Icon(
+                                        Icons.favorite_border,
+                                        size: kFontSizeValue + 3,
+                                        color: Colors.white,
+                                      )
+                                  ),
+
+                                  Text('#${widget.pokemon.id.toString()}',
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.white,
+                                        fontSize: MediaQuery.of(context).size.width > 600 ? kFontSizeValue * 2 : kFontSizeValue,
+                                        fontWeight: FontWeight.w700,)
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
 
-                        Align(
-                          alignment: Alignment.center,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(height: 20,),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(height: 20,),
 
-                              FilledButton(
-                                onPressed: null,
-                                style: FilledButton.styleFrom(
-                                  padding: EdgeInsets.all(MediaQuery.of(context).size.width > 600 ? kPaddingValue * 2 : kPaddingValue),
-                                ),
-                                child: FittedBox(
-                                  fit: BoxFit.contain,
-                                  child: Text(
-                                    '${widget.name.capitalizeFirstLetter()}',
-                                    style: GoogleFonts.montserrat(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: MediaQuery.of(context).size.width > 600 ? kFontSizeValue * 2 : kFontSizeValue,
+                                FilledButton(
+                                  onPressed: null,
+                                  style: FilledButton.styleFrom(
+                                    padding: EdgeInsets.all(MediaQuery.of(context).size.width > 600 ? kPaddingValue * 2 : kPaddingValue),
+                                  ),
+                                  child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: Text(
+                                      '${widget.name.capitalizeFirstLetter()}',
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: MediaQuery.of(context).size.width > 600 ? kFontSizeValue * 2 : kFontSizeValue,
 
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
 
-                              typesRow,
-                            ],
+                                typesRow,
+                              ],
+                            ),
                           ),
-                        ),
 
 
 
-                      ],
-                    ),
-                  )
+                        ],
+                      ),
+                    )
 
-                ],
+                  ],
+                ),
               ),
             ),
           ),
