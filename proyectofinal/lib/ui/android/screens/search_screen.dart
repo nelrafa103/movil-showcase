@@ -26,22 +26,29 @@ class seach_screen extends StatefulWidget {
 class _seach_screen extends State<seach_screen> {
   final TextEditingController _searchController = TextEditingController();
 
+  bool filtro = false;
   List<Param> param_list = [
-    Param(title: "Grass", url: "images/bulbassur.png", color: Grass),
-    Param(title: "Fire", url: "images/chamander.png", color: Fire),
-    Param(title: "Water", url: "images/squirtle.png", color: Water),
-    Param(title: "Bug", url: "images/caterpie.png", color: Bug),
-    Param(title: "Normal", url: "images/rattata.png", color: Normal),
-    Param(title: "Flying", url: "images/pidgey.png", color: Flying),
-    Param(title: "Electric", url: "images/pikachu.png", color: Electric),
-    Param(title: "Fighting", url: "images/mankey.png", color: Fighting),
-    Param(title: "Fairy", url: "images/cleafairy.png", color: Fairy),
-    Param(title: "Steel", url: "images/beldum.png", color: Steel),
-    Param(title: "Ice", url: "images/snover.png", color: Ice),
-    Param(title: "Poison", url: "images/nidoran-f.png", color: Poison),
-    Param(title: "Ground", url: "images/diglett.png", color: Ground),
-    Param(title: "Psychic", url: "images/abra.png", color: Psychic),
-    Param(title: "Rock", url: "images/geodude.png", color: Rock),
+    Param(
+      id: 12,
+      title: "Grass",
+      url: "images/bulbassur.png",
+      color: Grass,
+    ),
+    Param(id: 10, title: "Fire", url: "images/chamander.png", color: Fire),
+    Param(id: 11, title: "Water", url: "images/squirtle.png", color: Water),
+    Param(id: 7, title: "Bug", url: "images/caterpie.png", color: Bug),
+    Param(id: 1, title: "Normal", url: "images/rattata.png", color: Normal),
+    Param(id: 3, title: "Flying", url: "images/pidgey.png", color: Flying),
+    Param(
+        id: 13, title: "Electric", url: "images/pikachu.png", color: Electric),
+    Param(id: 2, title: "Fighting", url: "images/mankey.png", color: Fighting),
+    Param(id: 18, title: "Fairy", url: "images/cleafairy.png", color: Fairy),
+    Param(id: 9, title: "Steel", url: "images/beldum.png", color: Steel),
+    Param(id: 15, title: "Ice", url: "images/snover.png", color: Ice),
+    Param(id: 4, title: "Poison", url: "images/nidoran-f.png", color: Poison),
+    Param(id: 5, title: "Ground", url: "images/diglett.png", color: Ground),
+    Param(id: 14, title: "Psychic", url: "images/abra.png", color: Psychic),
+    Param(id: 6, title: "Rock", url: "images/geodude.png", color: Rock),
   ];
 
   void redirect(String param) {
@@ -84,12 +91,18 @@ class _seach_screen extends State<seach_screen> {
             double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
             double pokemonSize = screenHeight > 600 ? 50 : 70;
 
-            return param_item(
-                title: param_list[index].title,
-                url: param_list[index].url,
-                color: param_list[index].color,
-                paddingPerSize: paddingPerSize,
-                pokemonSize: pokemonSize);
+            return GestureDetector(
+                onTap: () async => {
+                      await BlocProvider.of<ListCubit>(context)
+                          .filter_by_type(param_list[index].id)
+                          .then((value) => showSearch(
+                              context: context, delegate: CustomSearchBar())),
+                    },
+                child: param_item(
+                    param: param_list[index],
+                    color: param_list[index].color,
+                    paddingPerSize: paddingPerSize,
+                    pokemonSize: pokemonSize));
           },
         );
       })),

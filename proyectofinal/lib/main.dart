@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:proyectofinal/router.dart';
 import 'package:proyectofinal/sqflite.dart';
 import 'package:proyectofinal/states/cubit/listeners/app_cubit.dart';
@@ -17,6 +18,7 @@ void main() {
   runApp(const MyApp());
   //Inicializando base de datos
   DbInitializer.initialize();
+  
   // await dotenv.load(fileName: ".env");
 }
 

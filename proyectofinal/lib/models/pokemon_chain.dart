@@ -23,7 +23,7 @@ class PokemonChain {
   factory PokemonChain.fromJson(Map<String, dynamic> json) => PokemonChain(
         babyTriggerItem: json["baby_trigger_item"],
         chain: Chain.fromJson(json["chain"]),
-        id: json["id"],
+        id: json["id"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -116,7 +116,7 @@ class EvolutionDetail {
         minAffection: json["min_affection"],
         minBeauty: json["min_beauty"],
         minHappiness: json["min_happiness"],
-        minLevel: json["min_level"],
+        minLevel: json["min_level"] ?? 0,
         needsOverworldRain: json["needs_overworld_rain"],
         partySpecies: json["party_species"],
         partyType: json["party_type"],

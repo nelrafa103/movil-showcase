@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyectofinal/models/bar_chart.dart';
 import 'package:proyectofinal/models/hive/fav_dao.dart';
+import 'package:proyectofinal/models/list.dart';
 import 'package:proyectofinal/models/pokemon.dart';
 import 'package:proyectofinal/models/pokemon_chain.dart';
 import 'package:proyectofinal/models/pokemon_evolution.dart';
@@ -32,10 +33,11 @@ class _PokemonDetailState extends State<PokemonDetail>
 
   bool isExpan = false;
   bool isFav = false;
+  var dio = Dio();
   late Future<PokemonChain> pokemon_chain;
-  Future<PokemonChain> fetchEvolution(String type) async {
-    var dio = Dio();
+  late Future<List<Pokemon>> pokemon_list;
 
+  Future<PokemonChain> fetchEvolution(String type) async {
     String url = "https://pokeapi.co/api/v2/pokemon-species/${type}";
     var response = await dio.get(url);
     var data = Welcome.fromJson(response.data);
@@ -43,6 +45,17 @@ class _PokemonDetailState extends State<PokemonDetail>
     var data2 = PokemonChain.fromJson(response2.data);
 
     return data2;
+  }
+
+  Future<List<Pokemon>> fetchPokemon(List<String> names) async {
+    final future = names.map((name) async {
+      var response2 =
+          await dio.get("https://pokeapi.co/api/v2/pokemon/${name}");
+      var pokemon = Pokemon.fromJson(response2.data);
+      return pokemon;
+    });
+    final results = await Future.wait(future);
+    return results;
   }
 
   @override
@@ -127,6 +140,7 @@ class _PokemonDetailState extends State<PokemonDetail>
         body:
             BlocBuilder<PokemonCubit, PokemonState>(builder: (context, state) {
           if (state is PokemonLoaded) {
+            isFav = DbInitializer.searchFav(state.pokemon.name);
             pokemon_chain = fetchEvolution(state.pokemon.name);
             return Stack(
               children: [
@@ -233,7 +247,7 @@ class _PokemonDetailState extends State<PokemonDetail>
                                                           .sprites
                                                           .other!
                                                           .officialArtwork
-                                                          .frontDefault)),
+                                                          .frontDefault!)),
                                             ),
                                           ),
                                           FractionalTranslation(
@@ -515,130 +529,80 @@ class _PokemonDetailState extends State<PokemonDetail>
                                           future: pokemon_chain,
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {
-                                              return Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    Card(
-                                                        color: Custom_Colors[
-                                                                state
-                                                                    .pokemon
-                                                                    .types[0]
-                                                                    .type
-                                                                    .name]![
-                                                            'color']!,
-                                                        child: Column(
+                                              List<String> urls = [];
+                                              List<Chain> chain = snapshot
+                                                  .data!.chain.evolvesTo;
+                                              bool noEvolution = false;
+                                              urls.add(snapshot
+                                                  .data!.chain.species.name);
+                                              while (noEvolution != true) {
+                                                for (var pokemon in chain) {
+                                                  urls.add(
+                                                      pokemon.species.name);
+                                                  if (pokemon
+                                                      .evolvesTo.isNotEmpty) {
+                                                    chain = pokemon.evolvesTo;
+                                                  } else {
+                                                    noEvolution = true;
+                                                  }
+                                                }
+                                              }
+
+                                              print(urls);
+
+                                              pokemon_list = fetchPokemon(urls);
+
+                                              return FutureBuilder(
+                                                  future: pokemon_list,
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.hasData) {
+                                                      return Wrap(
+                                                          alignment:
+                                                              WrapAlignment
+                                                                  .start,
                                                           children: [
-                                                            CachedNetworkImage(
-                                                                imageUrl:
-                                                                    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${DbInitializer.getPokemon(snapshot.data!.chain!.species!.name).id}.png"),
-                                                            Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        10),
-                                                                child: Text(
-                                                                  snapshot
-                                                                      .data!
-                                                                      .chain!
-                                                                      .species!
-                                                                      .name,
-                                                                  style: GoogleFonts
-                                                                      .montserrat(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontSize:
-                                                                        10,
-                                                                  ),
-                                                                ))
-                                                          ],
-                                                        )),
-                                                    Icon(Icons.arrow_forward),
-                                                    Card(
-                                                        color: Custom_Colors[
-                                                                state
-                                                                    .pokemon
-                                                                    .types[0]
-                                                                    .type
-                                                                    .name]![
-                                                            'color']!,
-                                                        child: Column(
-                                                          children: [
-                                                            CachedNetworkImage(
-                                                                imageUrl:
-                                                                    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${DbInitializer.getPokemon(snapshot.data!.chain!.species!.name).id + 1}.png"),
-                                                            Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        10),
-                                                                child: Text(
-                                                                  snapshot
-                                                                      .data!
-                                                                      .chain!
-                                                                      .evolvesTo[
-                                                                          0]
-                                                                      .species!
-                                                                      .name,
-                                                                  style: GoogleFonts
-                                                                      .montserrat(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontSize:
-                                                                        10,
-                                                                  ),
-                                                                ))
-                                                          ],
-                                                        )),
-                                                    Icon(Icons.arrow_forward),
-                                                    Card(
-                                                        color: Custom_Colors[
-                                                                state
-                                                                    .pokemon
-                                                                    .types[0]
-                                                                    .type
-                                                                    .name]![
-                                                            'color']!,
-                                                        child: Column(
-                                                          children: [
-                                                            CachedNetworkImage(
-                                                                imageUrl:
-                                                                    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${DbInitializer.getPokemon(snapshot.data!.chain!.species!.name).id + 2}.png"),
-                                                            Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        10),
-                                                                child: Text(
-                                                                  snapshot
-                                                                      .data!
-                                                                      .chain!
-                                                                      .evolvesTo[
-                                                                          0]
-                                                                      .evolvesTo[
-                                                                          0]
-                                                                      .species
-                                                                      .name,
-                                                                  style: GoogleFonts
-                                                                      .montserrat(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontSize:
-                                                                        10,
-                                                                  ),
-                                                                ))
-                                                          ],
-                                                        )),
-                                                  ]);
+                                                            for (var pokemon
+                                                                in snapshot
+                                                                    .data!) ...[
+                                                              Card(
+                                                                  color: Custom_Colors[state
+                                                                          .pokemon
+                                                                          .types[0]
+                                                                          .type
+                                                                          .name]![
+                                                                      'color']!,
+                                                                  child: Column(
+                                                                    children: [
+                                                                      CachedNetworkImage(
+                                                                          imageUrl: pokemon
+                                                                              .sprites
+                                                                              .frontDefault),
+                                                                      Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              10),
+                                                                          child:
+                                                                              Text(
+                                                                            pokemon.name,
+                                                                            style:
+                                                                                GoogleFonts.montserrat(
+                                                                              color: Colors.black,
+                                                                              fontWeight: FontWeight.w600,
+                                                                              fontSize: 10,
+                                                                            ),
+                                                                          ))
+                                                                    ],
+                                                                  )),
+                                                              if (pokemon !=
+                                                                  snapshot.data!
+                                                                      .last)
+                                                                Icon(Icons
+                                                                    .arrow_forward_rounded),
+                                                            ]
+                                                          ]);
+                                                    }
+                                                    return CircularProgressIndicator();
+                                                  });
                                             } else if (snapshot.hasError) {
                                               return Text('${snapshot.error}');
                                             }

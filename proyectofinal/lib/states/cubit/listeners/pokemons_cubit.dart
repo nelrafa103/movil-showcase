@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive/hive.dart';
+import 'package:proyectofinal/graphql.dart';
+import 'package:proyectofinal/models/graphql/pokemons.dart';
+import 'package:proyectofinal/models/graphql/queries.dart';
 import 'package:proyectofinal/models/pokemon.dart';
 import 'package:proyectofinal/models/types.dart';
 import 'package:proyectofinal/sqflite.dart';
@@ -12,6 +16,7 @@ class ListCubit extends Cubit<ListState> {
   List<Pokemon> list = [];
   static int limit = 20;
   static int offset = 0;
+
   /*
    Aqui se podria reciclar un poco de codigo 
   */
@@ -63,26 +68,38 @@ class ListCubit extends Cubit<ListState> {
   }
 
   void filter_by_name(String nombre) async {
-    try {
-      list.clear();
-      List<String> name_list = DbInitializer.search(nombre);
-      if (name_list.isNotEmpty) {
-        final future = name_list.map((element) async {
-          String url = "https://pokeapi.co/api/v2/pokemon/${element}";
-          var response = await dio.get(url);
-          var data = Pokemon.fromJson(response.data);
-          return data;
-        });
-        final results = await Future.wait(future);
-        results.removeWhere((element) => list.contains(element));
-        list.addAll(results);
-        emit(RepopulatedList(pokemons: list));
-      } else {
-        String url = "https://pokeapi.co/api/v2/pokemon/${nombre}";
-        var response = await dio.get(url);
-        var data = Pokemon.fromJson(response.data);
+    List<String> name_list = [];
 
-        list.add(data);
+    try {
+      final grapql_response =
+          await dio.post("https://graphql-pokeapi.graphcdn.app/", data: {
+        'query': names,
+        'variables': {'limit': 900, 'offset': 0}
+      });
+      PokemonGraphql pokemons_names =
+          PokemonGraphql.fromJson(grapql_response.data);
+
+      if (grapql_response.statusCode != 200) {
+        emit(ListError(grapql_response.statusMessage.toString()));
+      } else {
+        pokemons_names.data.pokemons.results.forEach((element) {
+          if (element.name.startsWith(nombre) && nombre.isNotEmpty) {
+            name_list.add(element.name);
+          }
+        });
+      }
+
+      if (name_list.isNotEmpty) {
+        list.clear();
+        final searching = name_list.map((nombre) async {
+          var response2 =
+              await dio.get("https://pokeapi.co/api/v2/pokemon/${nombre}");
+          var pokemon = Pokemon.fromJson(response2.data);
+          return pokemon;
+        });
+
+        final results = await Future.wait(searching);
+        list.addAll(results);
         emit(RepopulatedList(pokemons: list));
       }
     } catch (e) {
@@ -90,11 +107,12 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
-  void filter_by_type(String type) async {
+  Future<List<Pokemon>> filter_by_type(int type) async {
     list = [];
     String url = "https://pokeapi.co/api/v2/type/${type}";
 
     try {
+      emit(ListLoading());
       var response = await dio.get(url);
       var data = Types.fromJson(response.data);
 
@@ -106,11 +124,10 @@ class ListCubit extends Cubit<ListState> {
       final results = await Future.wait(future);
       list.addAll(results);
       emit(RepopulatedList(pokemons: list));
+      return list;
     } catch (e) {
       emit(ListError(e.toString()));
+      return list;
     }
   }
-  //void _busqueda(String nombre) {}
-  /* Por aqui debe haber algun metodo para que
-   cada vez que se acerque al final de la lista alga un fecth de mas pokemons */
 }
