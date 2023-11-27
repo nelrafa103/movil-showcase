@@ -60,12 +60,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           id: state.pokemons[index].id,
                           url: state.pokemons[index].sprites.frontDefault));
                       return PokemonWidget(
-                          pokemon: state.pokemons[index],
-                          types: state.pokemons[index].types,
-                          name: state.pokemons[index].name,
-                          paddingPerSize: paddingPerSize,
-                          pokemonSize: pokemonSize,
-                          url: state.pokemons[index].sprites.frontDefault);
+                        pokemon: state.pokemons[index],
+                        paddingPerSize: paddingPerSize,
+                        pokemonSize: pokemonSize,
+                      );
                     } else {
                       return const PokemonShimmerWidget();
                     }

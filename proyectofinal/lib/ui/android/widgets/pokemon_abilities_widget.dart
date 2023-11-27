@@ -18,7 +18,7 @@ class PokemonAbilitiesWidget extends StatelessWidget {
       padding: const EdgeInsets.all(9),
       width: double.infinity,
       child: Card(
-          color: Custom_Colors[typeName]!['color']!,
+          color: customColors[typeName]!['color']!,
           child: Padding(
               padding: const EdgeInsets.all(10),
               child: Text(

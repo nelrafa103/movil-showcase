@@ -12,7 +12,7 @@ class EvolutionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: Custom_Colors[pokemon.types[0].type.name]!['color']!,
+        color: customColors[pokemon.types[0].type.name]!['color']!,
         child: Column(
           children: [
             CachedNetworkImage(imageUrl: pokemon.sprites.frontDefault),

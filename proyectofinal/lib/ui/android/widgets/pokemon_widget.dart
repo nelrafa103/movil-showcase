@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyectofinal/models/hive/fav_dao.dart';
@@ -10,19 +11,14 @@ import 'package:proyectofinal/states/cubit/pokemon_cubit.dart';
 import 'package:proyectofinal/themes/pokemons_types.dart';
 
 class PokemonWidget extends StatefulWidget {
-  final String name;
   final Pokemon pokemon;
-  final List<Type> types;
-  final String url;
+
   final double paddingPerSize;
   final double pokemonSize;
 
   const PokemonWidget(
       {super.key,
       required this.pokemon,
-      required this.name,
-      required this.types,
-      required this.url,
       required this.paddingPerSize,
       required this.pokemonSize});
   @override
@@ -42,19 +38,16 @@ class _PokemonWidget extends State<PokemonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    String types = '';
-    Color card_color = Colors.lightBlue;
-    for (int i = 0; i < widget.types.length; i++) {
-      if (i == 0) {
-        card_color = checkColor(widget.types[i].type.name);
-      }
-      if (i + 1 != widget.types.length) {
-        types += '${widget.types[i].type.name} - ';
-      } else {
-        types += '${widget.types[i].type.name}';
-      }
-    }
+    List<Color> cardColor = [];
+    final List<Widget> icons = [];
+    cardColor.add(Colors.white);
 
+    cardColor.add(checkColor(widget.pokemon.types[0].type.name));
+
+    for (var element in widget.pokemon.types) {
+      dynamic type = customColors[element.type.name];
+      icons.add(SvgPicture.asset(type["icon"], semanticsLabel: ""));
+    }
     void changeIcon() {
       setState(() {
         isFav = !isFav;
@@ -78,8 +71,8 @@ class _PokemonWidget extends State<PokemonWidget> {
             height: double.infinity,
             decoration: BoxDecoration(
                 gradient: LinearGradient(
-                    colors: [card_color, card_color],
-                    begin: Alignment.bottomCenter,
+                    colors: cardColor,
+                    begin: Alignment.bottomRight,
                     end: Alignment.topCenter)),
             child: Padding(
               padding: EdgeInsets.all(widget.paddingPerSize),
@@ -107,14 +100,6 @@ class _PokemonWidget extends State<PokemonWidget> {
                                   size: 20,
                                   color: Colors.white,
                                 )),
-                      Text(
-                        types,
-                        style: GoogleFonts.montserrat(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                        ),
-                      ),
                       Text('#${widget.pokemon.id.toString()}',
                           style: GoogleFonts.montserrat(
                             color: Colors.white,
@@ -133,15 +118,16 @@ class _PokemonWidget extends State<PokemonWidget> {
                             child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Transform.scale(
-                              scale: 1.3,
+                              scale: 1,
                               child: CachedNetworkImage(
-                                imageUrl: widget.url,
+                                imageUrl: widget.pokemon.sprites.other!
+                                        .officialArtwork.frontDefault ??
+                                    widget.pokemon.sprites.frontDefault,
                                 fit: BoxFit.fill,
                                 filterQuality: FilterQuality.none,
                                 progressIndicatorBuilder:
                                     (context, url, downloadProgress) =>
-                                        CircularProgressIndicator(
-                                            value: downloadProgress.progress),
+                                        const CircularProgressIndicator(),
                                 errorWidget: (context, url, error) =>
                                     const Icon(Icons.error),
                               )),
@@ -156,8 +142,8 @@ class _PokemonWidget extends State<PokemonWidget> {
                               padding: const EdgeInsets.all(13.0),
                             ),
                             child: Text(
-                              widget.name[0].toUpperCase() +
-                                  widget.name.substring(1),
+                              widget.pokemon.name[0].toUpperCase() +
+                                  widget.pokemon.name.substring(1),
                               style: GoogleFonts.montserrat(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,
@@ -165,6 +151,10 @@ class _PokemonWidget extends State<PokemonWidget> {
                               ),
                             ),
                           ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: icons,
+                          )
                         ],
                       ),
                     ],

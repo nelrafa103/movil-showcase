@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:proyectofinal/hive.dart';
 import 'package:proyectofinal/models/graphql/pokemons.dart';
 import 'package:proyectofinal/models/graphql/queries.dart';
 import 'package:proyectofinal/models/list.dart';
@@ -79,18 +80,24 @@ class PokemonsCubit extends Cubit<PokemonsState> {
   Future<List<Pokemon>> filterByType(int type) async {
     _list = [];
     String url = "https://pokeapi.co/api/v2/type/${type}";
-
+    final dynamic results;
     try {
       emit(PokemonsLoading());
-      var response = await dio.get(url);
-      var data = Types.fromJson(response.data);
+      switch (type) {
+        case 0:
+          results = await _findFavs();
+        default:
+          var response = await dio.get(url);
+          var data = Types.fromJson(response.data);
 
-      final future = data.pokemon.map((e) async {
-        var response2 = await dio.get(e.pokemon.url);
-        var pokemon = Pokemon.fromJson(response2.data);
-        return pokemon;
-      });
-      final results = await Future.wait(future);
+          final future = data.pokemon.map((e) async {
+            var response2 = await dio.get(e.pokemon.url);
+            var pokemon = Pokemon.fromJson(response2.data);
+            return pokemon;
+          });
+          results = await Future.wait(future);
+      }
+
       _list.addAll(results);
       emit(PopulatedPokemons(pokemons: _list));
       return _list;
@@ -112,6 +119,23 @@ class PokemonsCubit extends Cubit<PokemonsState> {
         return pokemon;
       });
       final results = await Future.wait(future);
+      return results;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future<dynamic> _findFavs() async {
+    try {
+      List<String> nameList = DbInitializer.getAllFavs();
+      final future = nameList.map((element) async {
+        var response2 =
+            await dio.get("https://pokeapi.co/api/v2/pokemon/${element}");
+        var pokemon = Pokemon.fromJson(response2.data);
+        return pokemon;
+      });
+      final results = await Future.wait(future);
+
       return results;
     } catch (e) {
       return e.toString();

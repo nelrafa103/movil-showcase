@@ -85,4 +85,14 @@ class DbInitializer {
     });
     return PokemonDao(id: index, name: "", url: "");
   }
+
+  static List<String> getAllFavs() {
+    List<String> list = [];
+    if (_box2 != null) {
+      _box2!.toMap().forEach((key, value) {
+        list.add(value.name);
+      });
+    }
+    return list;
+  }
 }

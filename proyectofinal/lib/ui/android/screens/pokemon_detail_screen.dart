@@ -106,7 +106,7 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
         appBar: AppBar(
             title: Text(state.pokemon.name),
             backgroundColor:
-                Custom_Colors[state.pokemon.types[0].type.name]!['color']!),
+                customColors[state.pokemon.types[0].type.name]!['color']!),
         body:
             BlocBuilder<PokemonCubit, PokemonState>(builder: (context, state) {
           if (state is PokemonLoaded) {
@@ -121,11 +121,11 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              Custom_Colors[state.pokemon.types[0].type.name]![
+                              customColors[state.pokemon.types[0].type.name]![
                                   'color']!,
-                              Custom_Colors[state.pokemon.types[0].type.name]![
+                              customColors[state.pokemon.types[0].type.name]![
                                   'lighter']!,
-                              Custom_Colors[state.pokemon.types[0].type.name]![
+                              customColors[state.pokemon.types[0].type.name]![
                                   'darker']!,
                             ],
                             begin: _topAlignmentAnimation.value,
@@ -219,7 +219,7 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
                                         Container(
                                             height: 300,
                                             child: StatsGraph(
-                                              color: Custom_Colors[state
+                                              color: customColors[state
                                                   .pokemon
                                                   .types[0]
                                                   .type
@@ -301,7 +301,7 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
                                                           width:
                                                               double.infinity,
                                                           child: Card(
-                                                              color: Custom_Colors[state
+                                                              color: customColors[state
                                                                       .pokemon
                                                                       .types[0]
                                                                       .type

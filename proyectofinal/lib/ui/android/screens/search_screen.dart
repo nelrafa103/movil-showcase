@@ -52,7 +52,7 @@ class _SearchScreen extends State<SearchScreen> {
             mainAxisSpacing: 0,
             childAspectRatio: 1.6,
           ),
-          itemCount: 15,
+          itemCount: 16,
           itemBuilder: (BuildContext context, int index) {
             double screenHeight = MediaQuery.of(context).size.height;
             double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
@@ -132,12 +132,10 @@ class CustomSearchBar extends SearchDelegate {
                   double pokemonSize = screenHeight > 600 ? 50 : 70;
 
                   return PokemonWidget(
-                      pokemon: state.pokemons[index],
-                      types: state.pokemons[index].types,
-                      name: state.pokemons[index].name,
-                      paddingPerSize: paddingPerSize,
-                      pokemonSize: pokemonSize,
-                      url: state.pokemons[index].sprites.frontDefault);
+                    pokemon: state.pokemons[index],
+                    paddingPerSize: paddingPerSize,
+                    pokemonSize: pokemonSize,
+                  );
                 });
           } else if (state is PokemonsError) {
             return Text(state.message);

@@ -1,5 +1,8 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+import 'package:proyectofinal/shared/pokemon.dart';
+
 const Fire = Color(0xffEE8130);
 const FireLighter = Color(0xffFFA550);
 const FireDarker = Color(0xffC56600);
@@ -72,120 +75,119 @@ const Normal = Color(0xffA8A77A);
 const NormalLighter = Color(0xffC3C2A2);
 const NormalDarker = Color(0xff8B8A60);
 
+const Favorite = Colors.red;
 
-const Custom_Colors = {
+dynamic customColors = {
   "fire": {
+    "icon": iconBasics("fire"),
     "color": Fire,
     "lighter": FireLighter,
     "darker": FireDarker,
   },
-
   "water": {
+    "icon": iconBasics("water"),
     "color": Water,
     "lighter": WaterLighter,
     "darker": WaterDarker,
   },
-
   "electric": {
+    "icon": iconBasics("electric"),
     "color": Electric,
     "lighter": ElectricLighter,
     "darker": ElectricDarker,
   },
-
   "grass": {
+    "icon": iconBasics("grass"),
     "color": Grass,
     "lighter": GrassLighter,
     "darker": GrassDarker,
   },
-
   "ice": {
+    "icon": iconBasics("ice"),
     "color": Ice,
     "lighter": IceLighter,
     "darker": IceDarker,
   },
-
   "fighting": {
+    "icon": iconBasics("fighting"),
     "color": Fighting,
     "lighter": FightingLighter,
     "darker": FightingDarker,
   },
-
   "poison": {
+    "icon": iconBasics("poison"),
     "color": Poison,
     "lighter": PoisonLighter,
     "darker": PoisonDarker,
   },
-
   "ground": {
+    "icon": iconBasics("ground"),
     "color": Ground,
     "lighter": GroundLighter,
     "darker": GroundDarker,
   },
-
   "flying": {
+    "icon": iconBasics("flying"),
     "color": Flying,
     "lighter": FlyingLighter,
     "darker": FlyingDarker,
   },
-
   "psychic": {
+    "icon": iconBasics("psychic"),
     "color": Psychic,
     "lighter": PsychicLighter,
     "darker": PsychicDarker,
   },
-
   "bug": {
+    "icon": iconBasics("bug"),
     "color": Bug,
     "lighter": BugLighter,
     "darker": BugDarker,
   },
-
   "rock": {
+    "icon": iconBasics("rock"),
     "color": Rock,
     "lighter": RockLighter,
     "darker": RockDarker,
   },
-
   "ghost": {
+    "icon": iconBasics("ghost"),
     "color": Ghost,
     "lighter": GhostLighter,
     "darker": GhostDarker,
   },
-
   "dragon": {
+    "icon": iconBasics("dragon"),
     "color": Dragon,
     "lighter": DragonLighter,
     "darker": DragonDarker,
   },
-
   "dark": {
+    "icon": iconBasics("dark"),
     "color": Dark,
     "lighter": DarkLighter,
     "darker": DarkDarker,
   },
-
   "steel": {
+    "icon": iconBasics("steel"),
     "color": Steel,
     "lighter": SteelLighter,
     "darker": SteelDarker,
   },
-
   "fairy": {
+    "icon": iconBasics("fairy"),
     "color": Fairy,
     "lighter": FairyLighter,
     "darker": FairyDarker,
   },
-
   "normal": {
+    "icon": iconBasics("normal"),
     "color": Normal,
     "lighter": NormalLighter,
     "darker": NormalDarker,
   },
-
-
 };
 
- 
 Color checkColor(String type) {
   switch (type) {
     case 'fire':

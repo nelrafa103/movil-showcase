@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:proyectofinal/router.dart';
 import 'package:proyectofinal/hive.dart';
 import 'package:proyectofinal/states/cubit/app_cubit.dart';
-import 'package:proyectofinal/states/cubit/moves_cubit.dart';
+import 'package:proyectofinal/states/cubit/abilities_cubit.dart';
 import 'package:proyectofinal/states/cubit/pokemon_cubit.dart';
 import 'package:proyectofinal/states/cubit/pokemons_cubit.dart';
 import 'package:proyectofinal/ui/ios/screens/home_screen.dart';
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
             create: (context) => PokemonCubit(),
           ),
           BlocProvider(
-            create: (context) => MovesCubit(),
+            create: (context) => AbilitiesCubit(),
           ),
           BlocProvider(
             create: (context) => AppCubit()..changeTab(0),

@@ -1,33 +1,24 @@
 import 'dart:convert';
 
-abstract class MovesState {}
-
-class MovesInitial extends MovesState {}
-
-class MovesLoading extends MovesState {}
-
-// To parse this JSON data, do
-//
-//     final moves = movesFromJson(jsonString);
-
-Moves movesFromJson(String str) => Moves.fromJson(json.decode(str));
-
-String movesToJson(Moves data) => json.encode(data.toJson());
-
-class Moves extends MovesState {
+class Abilities {
   int count;
   String next;
   dynamic previous;
   List<Result> results;
 
-  Moves({
+  Abilities({
     required this.count,
     required this.next,
     required this.previous,
     required this.results,
   });
 
-  factory Moves.fromJson(Map<String, dynamic> json) => Moves(
+  factory Abilities.fromRawJson(String str) =>
+      Abilities.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Abilities.fromJson(Map<String, dynamic> json) => Abilities(
         count: json["count"],
         next: json["next"],
         previous: json["previous"],
@@ -51,6 +42,10 @@ class Result {
     required this.name,
     required this.url,
   });
+
+  factory Result.fromRawJson(String str) => Result.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
         name: json["name"],

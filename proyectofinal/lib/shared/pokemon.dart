@@ -40,23 +40,104 @@ Future<List<Pokemon>> fetchPokemon(List<String> names) async {
 
 List<Param> paramList = [
   Param(
+      icon: "",
+      id: 0,
+      title: 'Favorites',
+      url: "images/raichu.png",
+      color: Favorite),
+  Param(
+    icon: iconBasics("grass"),
     id: 12,
     title: "Grass",
     url: "images/bulbassur.png",
     color: Grass,
   ),
-  Param(id: 10, title: "Fire", url: "images/chamander.png", color: Fire),
-  Param(id: 11, title: "Water", url: "images/squirtle.png", color: Water),
-  Param(id: 7, title: "Bug", url: "images/caterpie.png", color: Bug),
-  Param(id: 1, title: "Normal", url: "images/rattata.png", color: Normal),
-  Param(id: 3, title: "Flying", url: "images/pidgey.png", color: Flying),
-  Param(id: 13, title: "Electric", url: "images/pikachu.png", color: Electric),
-  Param(id: 2, title: "Fighting", url: "images/mankey.png", color: Fighting),
-  Param(id: 18, title: "Fairy", url: "images/cleafairy.png", color: Fairy),
-  Param(id: 9, title: "Steel", url: "images/beldum.png", color: Steel),
-  Param(id: 15, title: "Ice", url: "images/snover.png", color: Ice),
-  Param(id: 4, title: "Poison", url: "images/nidoran-f.png", color: Poison),
-  Param(id: 5, title: "Ground", url: "images/diglett.png", color: Ground),
-  Param(id: 14, title: "Psychic", url: "images/abra.png", color: Psychic),
-  Param(id: 6, title: "Rock", url: "images/geodude.png", color: Rock),
+  Param(
+      icon: iconBasics("fire"),
+      id: 10,
+      title: "Fire",
+      url: "images/chamander.png",
+      color: Fire),
+  Param(
+      icon: iconBasics("water"),
+      id: 11,
+      title: "Water",
+      url: "images/squirtle.png",
+      color: Water),
+  Param(
+      icon: iconBasics("bug"),
+      id: 7,
+      title: "Bug",
+      url: "images/caterpie.png",
+      color: Bug),
+  Param(
+      icon: iconBasics("normal"),
+      id: 1,
+      title: "Normal",
+      url: "images/rattata.png",
+      color: Normal),
+  Param(
+      icon: iconBasics("flying"),
+      id: 3,
+      title: "Flying",
+      url: "images/pidgey.png",
+      color: Flying),
+  Param(
+      icon: iconBasics("electric"),
+      id: 13,
+      title: "Electric",
+      url: "images/pikachu.png",
+      color: Electric),
+  Param(
+      icon: iconBasics("fighting"),
+      id: 2,
+      title: "Fighting",
+      url: "images/mankey.png",
+      color: Fighting),
+  Param(
+      icon: iconBasics("fairy"),
+      id: 18,
+      title: "Fairy",
+      url: "images/cleafairy.png",
+      color: Fairy),
+  Param(
+      icon: iconBasics("steel"),
+      id: 9,
+      title: "Steel",
+      url: "images/beldum.png",
+      color: Steel),
+  Param(
+      icon: iconBasics("ice"),
+      id: 15,
+      title: "Ice",
+      url: "images/snover.png",
+      color: Ice),
+  Param(
+      icon: iconBasics("ice"),
+      id: 4,
+      title: "Poison",
+      url: "images/nidoran-f.png",
+      color: Poison),
+  Param(
+      icon: iconBasics("ground"),
+      id: 5,
+      title: "Ground",
+      url: "images/diglett.png",
+      color: Ground),
+  Param(
+      icon: iconBasics("psychic"),
+      id: 14,
+      title: "Psychic",
+      url: "images/abra.png",
+      color: Psychic),
+  Param(
+      icon: iconBasics("rock"),
+      id: 6,
+      title: "Rock",
+      url: "images/geodude.png",
+      color: Rock),
 ];
+
+String iconBasics(String param) {
+  return "icon/Type=${param}.svg";
+}
