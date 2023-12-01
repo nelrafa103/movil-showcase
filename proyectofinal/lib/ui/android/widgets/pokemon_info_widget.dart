@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyectofinal/models/pokemon.dart';
 import 'package:proyectofinal/shared/pokemon.dart';
+import 'package:proyectofinal/themes/pokemons_types.dart';
 
 class PokemonInfoWidget extends StatelessWidget {
   final Pokemon pokemon;
@@ -13,6 +15,12 @@ class PokemonInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> icons = [];
+
+    for (var element in pokemon.types) {
+      dynamic type = customColors[element.type.name];
+      icons.add(SvgPicture.asset(type["icon"], semanticsLabel: ""));
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Row(
@@ -21,7 +29,7 @@ class PokemonInfoWidget extends StatelessWidget {
           Column(
             children: [
               Text(
-                'Species',
+                'Height',
                 style: GoogleFonts.montserrat(
                   color: Colors.black,
                   fontWeight: FontWeight.w700,
@@ -29,7 +37,7 @@ class PokemonInfoWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                pokemon.species.name,
+                pokemon.height.toString() + " feet",
                 style: GoogleFonts.montserrat(
                   color: Colors.black,
                   fontWeight: FontWeight.w300,
@@ -48,14 +56,7 @@ class PokemonInfoWidget extends StatelessWidget {
                   fontSize: 16,
                 ),
               ),
-              Text(
-                typesToString(pokemon.types),
-                style: GoogleFonts.montserrat(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w300,
-                  fontSize: 12,
-                ),
-              ),
+              Row(children: icons),
             ],
           ),
           Column(

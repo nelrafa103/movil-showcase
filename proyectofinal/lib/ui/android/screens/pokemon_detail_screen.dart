@@ -10,6 +10,7 @@ import 'package:proyectofinal/states/cubit/pokemon_cubit.dart';
 import 'package:proyectofinal/states/pokemon_state.dart';
 import 'package:proyectofinal/themes/pokemons_types.dart';
 import 'package:proyectofinal/ui/android/widgets/evolution_widget.dart';
+import 'package:proyectofinal/ui/android/widgets/expasion_widget.dart';
 import 'package:proyectofinal/ui/android/widgets/pokemon_abilities_widget.dart';
 import 'package:proyectofinal/ui/android/widgets/pokemon_info_widget.dart';
 import 'package:proyectofinal/ui/android/widgets/pokemon_intro_widget.dart';
@@ -28,7 +29,7 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
   late Animation<Alignment> _topAlignmentAnimation;
   late Animation<Alignment> _bottomAlignmentAnimation;
 
-  bool isExpan = false;
+  // bool isExpan = false;
   bool isFav = false;
   late Future<PokemonChain> pokemon_chain;
   late Future<List<Pokemon>> pokemon_list;
@@ -104,7 +105,8 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
     final state = contexto.state as PokemonLoaded;
     return Scaffold(
         appBar: AppBar(
-            title: Text(state.pokemon.name),
+            title: Text(state.pokemon.name[0].toUpperCase() +
+                state.pokemon.name.substring(1)),
             backgroundColor:
                 customColors[state.pokemon.types[0].type.name]!['color']!),
         body:
@@ -271,67 +273,7 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
                                               ),
                                             ),
                                           ),
-                                          ExpansionPanelList(
-                                            expansionCallback:
-                                                (int index, bool isExpanded) {
-                                              setState(() {
-                                                isExpan = !isExpan;
-                                              });
-                                            },
-                                            children: [
-                                              ExpansionPanel(
-                                                headerBuilder:
-                                                    (BuildContext context,
-                                                        bool isExpanded) {
-                                                  return const ListTile(
-                                                    title: Text('Movements'),
-                                                  );
-                                                },
-                                                body: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: <Widget>[
-                                                      for (var item in state
-                                                          .pokemon.moves)
-                                                        Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(9),
-                                                          width:
-                                                              double.infinity,
-                                                          child: Card(
-                                                              color: customColors[state
-                                                                      .pokemon
-                                                                      .types[0]
-                                                                      .type
-                                                                      .name]![
-                                                                  'color']!,
-                                                              child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          10),
-                                                                  child: Text(
-                                                                    item.move
-                                                                        .name,
-                                                                    style: GoogleFonts
-                                                                        .montserrat(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      fontSize:
-                                                                          12,
-                                                                    ),
-                                                                  ))),
-                                                        )
-                                                    ]),
-                                                isExpanded: isExpan,
-                                              ),
-                                            ],
-                                          ),
+                                          ExpasionWidget(pokemon: state.pokemon)
                                         ])
                                       ],
                                     ),

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,6 +12,8 @@ import 'package:proyectofinal/models/pokemon.dart';
 import 'package:proyectofinal/hive.dart';
 import 'package:proyectofinal/states/cubit/pokemon_cubit.dart';
 import 'package:proyectofinal/themes/pokemons_types.dart';
+import 'package:proyectofinal/ui/android/screens/pokemon_detail_screen.dart';
+import 'package:proyectofinal/ui/ios/tabs/pokemon_detail_tab.dart';
 
 class PokemonWidget extends StatefulWidget {
   final Pokemon pokemon;
@@ -56,110 +61,159 @@ class _PokemonWidget extends State<PokemonWidget> {
 
     void funcion() {
       context.read<PokemonCubit>().providePokemon(widget.pokemon);
-      GoRouter.of(context).go("/detalle");
+      if (!Platform.isIOS) {
+        GoRouter.of(context).go("/detalle");
+      } else {
+        Navigator.of(context).pushReplacement(
+          CupertinoPageRoute(
+            builder: (context) => PokemonDetailTab(),
+          ),
+        );
+      }
     }
+
+    const double kPaddingValue = 15.0;
+    const double kFontSizeValue = 15.0;
 
     return GestureDetector(
         onTap: () => funcion(),
-        child: Card(
-          elevation: 3,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: cardColor,
-                    begin: Alignment.bottomRight,
-                    end: Alignment.topCenter)),
-            child: Padding(
-              padding: EdgeInsets.all(widget.paddingPerSize),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            DbInitializer.saveFavs(FavDao(
-                                name: widget.pokemon.name,
-                                id: widget.pokemon.id));
-                            changeIcon();
-                          },
-                          icon: isFav
-                              ? const Icon(
-                                  Icons.favorite,
-                                  size: 20,
-                                  color: Colors.red,
-                                )
-                              : const Icon(
-                                  Icons.favorite_border,
-                                  size: 20,
-                                  color: Colors.white,
-                                )),
-                      Text('#${widget.pokemon.id.toString()}',
-                          style: GoogleFonts.montserrat(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                          )),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: widget.pokemonSize,
-                        height: widget.pokemonSize,
-                        child: Center(
-                            child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Transform.scale(
-                              scale: 1,
-                              child: CachedNetworkImage(
-                                imageUrl: widget.pokemon.sprites.other!
-                                        .officialArtwork.frontDefault ??
-                                    widget.pokemon.sprites.frontDefault,
-                                fit: BoxFit.fill,
-                                filterQuality: FilterQuality.none,
-                                progressIndicatorBuilder:
-                                    (context, url, downloadProgress) =>
-                                        const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                              )),
-                        )),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Card(
+            elevation: 3,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                cardColor.first.withOpacity(0.6),
+                cardColor.last.withOpacity(1)
+              ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
+              child: Padding(
+                padding: EdgeInsets.all(MediaQuery.of(context).size.width > 600
+                    ? kPaddingValue * 2
+                    : 4),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Stack(
                         children: [
-                          FilledButton(
-                            onPressed: null,
-                            style: FilledButton.styleFrom(
-                              padding: const EdgeInsets.all(13.0),
-                            ),
-                            child: Text(
-                              widget.pokemon.name[0].toUpperCase() +
-                                  widget.pokemon.name.substring(1),
-                              style: GoogleFonts.montserrat(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
+                          //Foto del pokemon:
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Transform.scale(
+                                scale: MediaQuery.of(context).size.width > 600
+                                    ? 1.5
+                                    : 1.1,
+                                child: CachedNetworkImage(
+                                  imageUrl: widget.pokemon.sprites.other!
+                                      .officialArtwork.frontDefault!,
+                                  fit: BoxFit.fill,
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: MediaQuery.of(context).size.width > 600 ? 2 : 1,
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  right: MediaQuery.of(context).size.width > 600
+                                      ? kPaddingValue * 2
+                                      : kPaddingValue),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        DbInitializer.saveFavs(FavDao(
+                                            name: widget.pokemon.name,
+                                            id: widget.pokemon.id));
+                                        changeIcon();
+                                      },
+                                      icon: isFav
+                                          ? const Icon(
+                                              Icons.favorite,
+                                              size: kFontSizeValue + 5,
+                                              color: Colors.white,
+                                            )
+                                          : const Icon(
+                                              Icons.favorite_border,
+                                              size: kFontSizeValue + 3,
+                                              color: Colors.white,
+                                            )),
+                                  Text('#${widget.pokemon.id.toString()}',
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.white,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width >
+                                                    600
+                                                ? kFontSizeValue * 2
+                                                : kFontSizeValue,
+                                        fontWeight: FontWeight.w700,
+                                      )),
+                                ],
                               ),
                             ),
                           ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: icons,
-                          )
+                          Align(
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                FilledButton(
+                                  onPressed: null,
+                                  style: FilledButton.styleFrom(
+                                    padding: EdgeInsets.all(
+                                        MediaQuery.of(context).size.width > 600
+                                            ? kPaddingValue * 2
+                                            : kPaddingValue),
+                                  ),
+                                  child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: Text(
+                                      widget.pokemon.name[0].toUpperCase() +
+                                          widget.pokemon.name.substring(1),
+                                      style: GoogleFonts.montserrat(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width >
+                                                    600
+                                                ? kFontSizeValue * 2
+                                                : kFontSizeValue,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  children: icons,
+                                )
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                    ],
-                  ),
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),

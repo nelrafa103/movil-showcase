@@ -113,7 +113,7 @@ List<Param> paramList = [
       url: "images/snover.png",
       color: Ice),
   Param(
-      icon: iconBasics("ice"),
+      icon: iconBasics("poison"),
       id: 4,
       title: "Poison",
       url: "images/nidoran-f.png",

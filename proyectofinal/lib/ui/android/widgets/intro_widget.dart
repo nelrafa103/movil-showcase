@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class IntroWidget extends StatelessWidget {
@@ -7,38 +8,65 @@ class IntroWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      shape: const ContinuousRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomRight: Radius.circular(10),
-          bottomLeft: Radius.circular(10),
-        ),
-      ),
-      expandedHeight: 250,
-      floating: false,
+      expandedHeight: 130.0,
+      stretch: true,
+      floating: true,
       pinned: true,
-      backgroundColor: const Color.fromRGBO(193, 39, 45, 1),
+      backgroundColor: Colors.white60,
       flexibleSpace: FlexibleSpaceBar(
-        title: Text(
-          'Mi Pokedex',
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500, fontStyle: FontStyle.normal),
-        ),
         background: Image.asset(
-          'images/PokedexMainBg5.png',
+          'images/AppBarBG.png',
           fit: BoxFit.cover,
         ),
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'icon/pokeball_outline.svg',
+              height: 30,
+              color: Colors.black54,
+            ),
+            Text(
+              'Mi Pokedex',
+              style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w600,
+                fontStyle: FontStyle.normal,
+                color: Colors.black54,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+        stretchModes: const <StretchMode>[
+          StretchMode.zoomBackground,
+          StretchMode.blurBackground,
+          StretchMode.fadeTitle,
+        ],
       ),
       actions: [
-        IconButton(
-          icon: const Icon(Icons.favorite_border),
-          color: Colors.white,
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: const Icon(Icons.filter_alt_outlined),
-          color: Colors.white,
-          onPressed: () {},
-        ),
+        Padding(
+            padding: const EdgeInsets.all(18),
+            child: IconButton(
+                onPressed: () {
+                  //Mostrar listado de pokemones favoritos
+                },
+                icon: const Icon(
+                  Icons.favorite,
+                  size: 24,
+                  color: Colors.black54,
+                ))
+            /* icon: isFav
+                  ? const Icon(
+                      Icons.favorite,
+                      size: 24,
+                      color: Colors.black54,
+                    )
+                  : const Icon(
+                      Icons.favorite_border,
+                      size: 24,
+                      color: Colors.black54,
+                    )), */
+            ),
       ],
     );
   }

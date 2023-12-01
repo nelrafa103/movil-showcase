@@ -53,7 +53,8 @@ class PokemonsCubit extends Cubit<PokemonsState> {
         emit(PokemonsError(grapqlResponse.statusMessage.toString()));
       } else {
         for (var element in pokemonsNames.data.pokemons.results) {
-          if (element.name.startsWith(nombre) && nombre.isNotEmpty) {
+          if (element.name.startsWith(nombre.toLowerCase()) &&
+              nombre.isNotEmpty) {
             nameList.add(element.name);
           }
         }
@@ -70,7 +71,9 @@ class PokemonsCubit extends Cubit<PokemonsState> {
 
         final results = await Future.wait(searching);
         _list.addAll(results);
-        emit(PopulatedPokemons(pokemons: _list));
+        PopulatedPokemons _pokemons = PopulatedPokemons(pokemons: _list);
+        _pokemons.setisfiltered();
+        emit(_pokemons);
       }
     } catch (e) {
       emit(PokemonsError(e.toString()));
@@ -140,5 +143,11 @@ class PokemonsCubit extends Cubit<PokemonsState> {
     } catch (e) {
       return e.toString();
     }
+  }
+
+  void addFilter() {
+    PopulatedPokemons _pokemons = PopulatedPokemons(pokemons: _list);
+    _pokemons.setisfiltered();
+    emit(_pokemons);
   }
 }

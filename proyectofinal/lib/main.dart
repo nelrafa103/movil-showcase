@@ -8,6 +8,7 @@ import 'package:proyectofinal/states/cubit/app_cubit.dart';
 import 'package:proyectofinal/states/cubit/abilities_cubit.dart';
 import 'package:proyectofinal/states/cubit/pokemon_cubit.dart';
 import 'package:proyectofinal/states/cubit/pokemons_cubit.dart';
+import 'package:proyectofinal/ui/android/screens/pokemon_detail_screen.dart';
 import 'package:proyectofinal/ui/ios/screens/home_screen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -26,9 +27,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!kIsWeb) {
       if (Platform.isIOS || Platform.isMacOS) {
-        return CupertinoApp(
-          routes: {"/": (_) => MyHomePage("", title: "")},
-        );
+        return BlocProvider(
+            create: (context) => PokemonCubit(),
+            child: CupertinoApp(routes: {
+              "/": (_) => const MyHomePage("", title: ""),
+              "/detalle": (_) => const PokemonDetailScreen()
+            }));
       }
     }
     return MultiBlocProvider(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyectofinal/models/param.dart';
 
@@ -31,13 +32,8 @@ class _FilterWidget extends State<FilterWidget> {
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(widget.param.url),
-              fit: BoxFit.cover,
-              alignment: Alignment.centerRight,
-            ),
             gradient: LinearGradient(
-                colors: [widget.color, widget.color],
+                colors: [widget.color, widget.color.withOpacity(0.5)],
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter)),
         child: Padding(
@@ -50,11 +46,17 @@ class _FilterWidget extends State<FilterWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      SvgPicture.asset(
+                        widget.param.icon,
+                        height: 100,
+                      ),
                       FilledButton(
                         onPressed: null,
                         style: FilledButton.styleFrom(
@@ -67,14 +69,6 @@ class _FilterWidget extends State<FilterWidget> {
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
                           ),
-                        ),
-                      ),
-                      Text(
-                        types,
-                        style: GoogleFonts.montserrat(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
                         ),
                       ),
                     ],
