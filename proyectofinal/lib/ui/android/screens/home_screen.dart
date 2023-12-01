@@ -102,14 +102,14 @@ class _MyHomePageState extends State<MyHomePage> {
               listener: (context, state) {},
               builder: (context, state) {
                 if (state is PopulatedPokemons) {
+                  double screenWidth = MediaQuery.of(context).size.width;
                   return GridView.builder(
                       controller: controller,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: screenWidth < 600 ? 2 : 4,
                         crossAxisSpacing: 0,
                         mainAxisSpacing: 0,
-                        childAspectRatio: 1.6,
+                        childAspectRatio: screenWidth < 600 ? 1.6 : 1.1,
                       ),
                       itemCount: state.pokemons.length,
                       itemBuilder: (BuildContext context, int index) {
