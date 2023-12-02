@@ -32,7 +32,9 @@ class MyApp extends StatelessWidget {
             child: CupertinoApp(routes: {
               "/": (_) => const MyHomePage("", title: ""),
               "/detalle": (_) => const PokemonDetailScreen()
-            }));
+            },
+              debugShowCheckedModeBanner: false,
+            ));
       }
     }
     return MultiBlocProvider(
@@ -52,6 +54,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp.router(
           routerConfig: router,
+          debugShowCheckedModeBanner: false,
         ));
   }
 }

@@ -19,67 +19,76 @@ class PokemonInfoWidget extends StatelessWidget {
 
     for (var element in pokemon.types) {
       dynamic type = customColors[element.type.name];
-      icons.add(SvgPicture.asset(type["icon"], semanticsLabel: ""));
+      icons.add(SvgPicture.asset(type["icon"], semanticsLabel: "", height: 40,));
     }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Column(
-            children: [
-              Text(
-                'Height',
-                style: GoogleFonts.montserrat(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              children: [
+                Text(
+                  'Height',
+                  style: GoogleFonts.montserrat(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              Text(
-                pokemon.height.toString() + " feet",
-                style: GoogleFonts.montserrat(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w300,
-                  fontSize: 12,
+                Text(
+                  pokemon.height.toString() + " feet",
+                  style: GoogleFonts.montserrat(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 12,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                'Type',
-                style: GoogleFonts.montserrat(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
+              ],
+            ),
+        
+            const VerticalDivider(),
+        
+            Column(
+              children: [
+                Text(
+                  'Type',
+                  style: GoogleFonts.montserrat(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              Row(children: icons),
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                'Weight',
-                style: GoogleFonts.montserrat(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
+                Row(children: icons),
+              ],
+            ),
+        
+            VerticalDivider(),
+        
+            Column(
+              children: [
+                Text(
+                  'Weight',
+                  style: GoogleFonts.montserrat(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              Text(
-                '${pokemon.weight} kg',
-                style: GoogleFonts.montserrat(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w300,
-                  fontSize: 12,
+                Text(
+                  '${pokemon.weight} kg',
+                  style: GoogleFonts.montserrat(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 12,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

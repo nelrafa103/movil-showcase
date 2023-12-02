@@ -51,7 +51,7 @@ class _PokemonWidget extends State<PokemonWidget> {
 
     for (var element in widget.pokemon.types) {
       dynamic type = customColors[element.type.name];
-      icons.add(SvgPicture.asset(type["icon"], semanticsLabel: ""));
+      icons.add(SvgPicture.asset(type["icon"], semanticsLabel: "", height: 40,));
     }
     void changeIcon() {
       setState(() {
@@ -77,143 +77,133 @@ class _PokemonWidget extends State<PokemonWidget> {
 
     return GestureDetector(
         onTap: () => funcion(),
-        child: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Card(
-            elevation: 3,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                cardColor.first.withOpacity(0.6),
-                cardColor.last.withOpacity(1)
-              ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
-              child: Padding(
-                padding: EdgeInsets.all(MediaQuery.of(context).size.width > 600
-                    ? kPaddingValue * 2
-                    : 4),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          //Foto del pokemon:
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Transform.scale(
-                                scale: MediaQuery.of(context).size.width > 600
-                                    ? 1.5
-                                    : 1.1,
-                                child: CachedNetworkImage(
-                                  imageUrl: widget.pokemon.sprites.other!
-                                      .officialArtwork.frontDefault!,
-                                  fit: BoxFit.fill,
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          CircularProgressIndicator(
-                                              value: downloadProgress.progress),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                )),
-                          ),
-                        ],
-                      ),
+        child: Card(
+          elevation: 3,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+              cardColor.first.withOpacity(0.6),
+              cardColor.last.withOpacity(1)
+            ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width > 600
+                  ? kPaddingValue * 2
+                  : 2),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        //Foto del pokemon:
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Transform.scale(
+                              scale: MediaQuery.of(context).size.width > 600
+                                  ? 1.5
+                                  : 1.0,
+                              child: CachedNetworkImage(
+                                imageUrl: widget.pokemon.sprites.other!
+                                    .officialArtwork.frontDefault!,
+                                fit: BoxFit.fill,
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) =>
+                                        CircularProgressIndicator(
+                                            value: downloadProgress.progress),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              )),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: MediaQuery.of(context).size.width > 600 ? 2 : 1,
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  right: MediaQuery.of(context).size.width > 600
+                  ),
+
+                  Expanded(
+                    flex: MediaQuery.of(context).size.width > 600 ? 2 : 1,
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    DbInitializer.saveFavs(FavDao(
+                                        name: widget.pokemon.name,
+                                        id: widget.pokemon.id));
+                                    changeIcon();
+                                  },
+                                  icon: isFav
+                                      ? const Icon(
+                                          Icons.favorite,
+                                          size: kFontSizeValue + 5,
+                                          color: Colors.white,
+                                        )
+                                      : const Icon(
+                                          Icons.favorite_border,
+                                          size: kFontSizeValue + 3,
+                                          color: Colors.white,
+                                        )),
+                              Text('#${widget.pokemon.id.toString()}  ',
+                                  style: GoogleFonts.montserrat(
+                                    color: Colors.white,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width >
+                                                600
+                                            ? kFontSizeValue * 2
+                                            : kFontSizeValue,
+                                    fontWeight: FontWeight.w700,
+                                  )),
+                            ],
+                          ),
+                        ),
+
+                        Align(
+                          alignment: Alignment.center,
+                          child: FilledButton(
+                            onPressed: null,
+                            style: FilledButton.styleFrom(
+                              padding: EdgeInsets.all(
+                                  MediaQuery.of(context).size.width > 600
                                       ? kPaddingValue * 2
-                                      : kPaddingValue),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                      onPressed: () {
-                                        DbInitializer.saveFavs(FavDao(
-                                            name: widget.pokemon.name,
-                                            id: widget.pokemon.id));
-                                        changeIcon();
-                                      },
-                                      icon: isFav
-                                          ? const Icon(
-                                              Icons.favorite,
-                                              size: kFontSizeValue + 5,
-                                              color: Colors.white,
-                                            )
-                                          : const Icon(
-                                              Icons.favorite_border,
-                                              size: kFontSizeValue + 3,
-                                              color: Colors.white,
-                                            )),
-                                  Text('#${widget.pokemon.id.toString()}',
-                                      style: GoogleFonts.montserrat(
-                                        color: Colors.white,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width >
-                                                    600
-                                                ? kFontSizeValue * 2
-                                                : kFontSizeValue,
-                                        fontWeight: FontWeight.w700,
-                                      )),
-                                ],
+                                      : kPaddingValue / 2),
+                            ),
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Text(
+                                widget.pokemon.name[0].toUpperCase() +
+                                    widget.pokemon.name.substring(1),
+                                style: GoogleFonts.montserrat(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize:
+                                  MediaQuery.of(context).size.width >
+                                      600
+                                      ? kFontSizeValue * 2
+                                      : kFontSizeValue - 2,
+                                ),
                               ),
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                FilledButton(
-                                  onPressed: null,
-                                  style: FilledButton.styleFrom(
-                                    padding: EdgeInsets.all(
-                                        MediaQuery.of(context).size.width > 600
-                                            ? kPaddingValue * 2
-                                            : kPaddingValue),
-                                  ),
-                                  child: FittedBox(
-                                    fit: BoxFit.contain,
-                                    child: Text(
-                                      widget.pokemon.name[0].toUpperCase() +
-                                          widget.pokemon.name.substring(1),
-                                      style: GoogleFonts.montserrat(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width >
-                                                    600
-                                                ? kFontSizeValue * 2
-                                                : kFontSizeValue,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  children: icons,
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                        ),
+
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: icons,
+                          )
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
           ),

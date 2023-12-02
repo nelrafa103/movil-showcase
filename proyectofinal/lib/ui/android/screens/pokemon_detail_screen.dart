@@ -106,7 +106,14 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
     return Scaffold(
         appBar: AppBar(
             title: Text(state.pokemon.name[0].toUpperCase() +
-                state.pokemon.name.substring(1)),
+                state.pokemon.name.substring(1),
+              style: GoogleFonts.montserrat(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),),
+            iconTheme: IconThemeData(
+              color: Colors.white,
+            ),
             backgroundColor:
                 customColors[state.pokemon.types[0].type.name]!['color']!),
         body:
@@ -133,11 +140,15 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
                             begin: _topAlignmentAnimation.value,
                             end: _bottomAlignmentAnimation.value,
                           ),
-                        ),
-                      );
-                    }),
+                      ),
+                    );
+                }),
+
+                //Poner textura ruido al fondo
+
+
                 Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Row(
                     children: [
                       IconButton(
@@ -151,7 +162,7 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
                               ? const Icon(
                                   Icons.favorite,
                                   size: 20,
-                                  color: Colors.red,
+                                  color: Colors.white,
                                 )
                               : const Icon(
                                   Icons.favorite_border,
@@ -176,96 +187,52 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
                               height: 100,
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(12.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
                               child: Container(
                                   decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20),
                                     ),
                                     color: Colors.white,
                                   ),
                                   child: Column(children: [
-                                    PokemonIntroWidget(pokemon: state.pokemon),
-                                    Text(
-                                      state.pokemon.id.toString(),
-                                      style: GoogleFonts.montserrat(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 16,
+                                      PokemonIntroWidget(pokemon: state.pokemon),
+
+                                      Text(
+                                        '#${state.pokemon.id.toString()}',
+                                        style: GoogleFonts.montserrat(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                        ),
                                       ),
-                                    ),
+
+
+                                    //Descripción del pokemón
+                                    // Center(
+                                    //   child: Container(
+                                    //     child: Text(
+                                    //         state.pokemon.species.flavorTextEntries.first.flavorText
+                                    //     ),
+                                    //   ),
+                                    // ),
+
 
                                     const SizedBox(
-                                      height: 10,
-                                    ),
+                                        height: 30,
+                                      ),
 
-                                    PokemonInfoWidget(pokemon: state.pokemon),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
+                                      PokemonInfoWidget(pokemon: state.pokemon),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
 
-                                    //Estadísticas
-                                    Column(
-                                      children: [
-                                        Center(
-                                          child: Text(
-                                            'Base Stats',
-                                            style: GoogleFonts.montserrat(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                            height: 300,
-                                            child: StatsGraph(
-                                              color: customColors[state
-                                                  .pokemon
-                                                  .types[0]
-                                                  .type
-                                                  .name]!['color']!,
-                                              stats: state.pokemon.stats,
-                                            )),
-                                      ],
-                                    ),
-
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-
-                                    Column(
-                                      children: [
-                                        Center(
-                                          child: Text(
-                                            'Abilities',
-                                            style: GoogleFonts.montserrat(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        ),
-                                        Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              for (var item
-                                                  in state.pokemon.abilities)
-                                                PokemonAbilitiesWidget(
-                                                    pokemonName:
-                                                        item.ability.name,
-                                                    typeName: state.pokemon
-                                                        .types[0].type.name)
-                                            ]),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Column(children: [
+                                      //Estadísticas
+                                      Column(
+                                        children: [
                                           Center(
                                             child: Text(
-                                              'Moves',
+                                              'Base Stats',
                                               style: GoogleFonts.montserrat(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w700,
@@ -273,75 +240,134 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
                                               ),
                                             ),
                                           ),
-                                          ExpasionWidget(pokemon: state.pokemon)
-                                        ])
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 30,
-                                    ),
-                                    Column(children: [
-                                      Center(
-                                        child: Text(
-                                          'Evolution',
-                                          style: GoogleFonts.montserrat(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 20,
+                                          Container(
+                                              height: 300,
+                                              child: StatsGraph(
+                                                color: customColors[state
+                                                    .pokemon
+                                                    .types[0]
+                                                    .type
+                                                    .name]!['color']!,
+                                                stats: state.pokemon.stats,
+                                              )),
+                                        ],
+                                      ),
+
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+
+                                      Column(
+                                        children: [
+                                          Center(
+                                            child: Text(
+                                              'Abilities',
+                                              style: GoogleFonts.montserrat(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                          ),
+                                          Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                for (var item
+                                                    in state.pokemon.abilities)
+                                                  PokemonAbilitiesWidget(
+                                                      pokemonName:
+                                                          item.ability.name,
+                                                      typeName: state.pokemon
+                                                          .types[0].type.name)
+                                              ]),
+                                          const SizedBox(
+                                            height: 30,
+                                          ),
+                                          Column(children: [
+                                            Center(
+                                              child: Text(
+                                                'Moves',
+                                                style: GoogleFonts.montserrat(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 20,
+                                                ),
+                                              ),
+                                            ),
+                                            ExpasionWidget(pokemon: state.pokemon)
+                                          ])
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      Column(children: [
+                                        Center(
+                                          child: Text(
+                                            'Evolution',
+                                            style: GoogleFonts.montserrat(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 20,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      FutureBuilder(
-                                          future: pokemon_chain,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              List<String> urls = [];
-                                              List<Chain> chain = snapshot
-                                                  .data!.chain.evolvesTo;
-                                              bool noEvolution = false;
-                                              urls.add(snapshot
-                                                  .data!.chain.species.name);
-                                              while (noEvolution != true) {
-                                                for (var pokemon in chain) {
-                                                  urls.add(
-                                                      pokemon.species.name);
-                                                  if (pokemon
-                                                      .evolvesTo.isNotEmpty) {
-                                                    chain = pokemon.evolvesTo;
-                                                  } else {
-                                                    noEvolution = true;
+                                        FutureBuilder(
+                                            future: pokemon_chain,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                List<String> urls = [];
+                                                List<Chain> chain = snapshot
+                                                    .data!.chain.evolvesTo;
+                                                bool noEvolution = false;
+                                                urls.add(snapshot
+                                                    .data!.chain.species.name);
+                                                while (noEvolution != true) {
+                                                  for (var pokemon in chain) {
+                                                    urls.add(
+                                                        pokemon.species.name);
+                                                    if (pokemon
+                                                        .evolvesTo.isNotEmpty) {
+                                                      chain = pokemon.evolvesTo;
+                                                    } else {
+                                                      noEvolution = true;
+                                                    }
                                                   }
                                                 }
+
+                                                pokemon_list = fetchPokemon(urls);
+
+                                                return FutureBuilder(
+                                                    future: pokemon_list,
+                                                    builder: (context, snapshot) {
+                                                      if (snapshot.hasData) {
+                                                        return Wrap(
+                                                            alignment:
+                                                                WrapAlignment
+                                                                    .start,
+                                                            children: [
+                                                              for (var pokemon
+                                                                  in snapshot
+                                                                      .data!) ...[
+                                                                EvolutionWidget(
+                                                                    pokemon:
+                                                                        pokemon),
+                                                              ]
+                                                            ]);
+                                                      }
+                                                      return const CircularProgressIndicator();
+                                                    });
+                                              } else if (snapshot.hasError) {
+                                                return Text('${snapshot.error}');
                                               }
+                                              return const CircularProgressIndicator();
+                                            }),
+                                      ]),
 
-                                              pokemon_list = fetchPokemon(urls);
-
-                                              return FutureBuilder(
-                                                  future: pokemon_list,
-                                                  builder: (context, snapshot) {
-                                                    if (snapshot.hasData) {
-                                                      return Wrap(
-                                                          alignment:
-                                                              WrapAlignment
-                                                                  .start,
-                                                          children: [
-                                                            for (var pokemon
-                                                                in snapshot
-                                                                    .data!) ...[
-                                                              EvolutionWidget(
-                                                                  pokemon:
-                                                                      pokemon),
-                                                            ]
-                                                          ]);
-                                                    }
-                                                    return const CircularProgressIndicator();
-                                                  });
-                                            } else if (snapshot.hasError) {
-                                              return Text('${snapshot.error}');
-                                            }
-                                            return const CircularProgressIndicator();
-                                          })
-                                    ]),
+                                      const SizedBox(
+                                        height: 40,
+                                      ),
                                   ])),
                             )
                           ],
@@ -353,7 +379,7 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
               ],
             );
           }
-          return Container();
+            return Container();
         }));
   }
 }
