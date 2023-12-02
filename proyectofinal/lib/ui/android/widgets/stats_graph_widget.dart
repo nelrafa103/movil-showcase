@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:proyectofinal/models/bar_chart.dart';
 import 'package:proyectofinal/models/pokemon.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -54,16 +55,29 @@ class _StatsGraph extends State<StatsGraph> {
         colorFn: (BarChartModel series, _) =>
             charts.ColorUtil.fromDartColor(widget.color),
         // Agrega el valor dentro de cada barra
-        // insideLabelStyleAccessorFn: (BarChartModel series, _) => series.value.,
+        labelAccessorFn: (BarChartModel series, _) =>
+        '${series.label}: ${series.value.toString()}',
+        insideLabelStyleAccessorFn: (BarChartModel series, _) {
+          const color = charts.MaterialPalette.white;
+          return charts.TextStyleSpec(
+              color: color,
+              fontFamily: GoogleFonts.montserrat(fontWeight: FontWeight.w700).fontFamily,
+          );
+        },
       ),
     ];
 
     return Container(
-      padding: const EdgeInsets.all(10),
       child: charts.BarChart(
         series,
         animate: true,
         vertical: false,
+        defaultRenderer: charts.BarRendererConfig(
+          cornerStrategy: const charts.ConstCornerStrategy(10),
+          barRendererDecorator: charts.BarLabelDecorator(),
+        ),
+        domainAxis:
+        const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
       ),
     );
   }

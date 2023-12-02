@@ -12,21 +12,35 @@ class EvolutionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: customColors[pokemon.types[0].type.name]!['color']!,
-        child: Column(
-          children: [
-            CachedNetworkImage(imageUrl: pokemon.sprites.frontDefault),
-            Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  pokemon.name[0].toUpperCase() + pokemon.name.substring(1),
-                  style: GoogleFonts.montserrat(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 10,
-                  ),
-                ))
-          ],
+        elevation: 2,
+        shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              customColors[pokemon.types[0].type.name]!['color']!,
+              Colors.white,
+            ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CachedNetworkImage(imageUrl: pokemon.sprites.other!.officialArtwork.frontDefault!, width: 75,),
+              ),
+              Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    pokemon.name[0].toUpperCase() + pokemon.name.substring(1),
+                    style: GoogleFonts.montserrat(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 10,
+                    ),
+                  ))
+            ],
+          ),
         ));
   }
 }

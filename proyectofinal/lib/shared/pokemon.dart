@@ -40,7 +40,7 @@ Future<List<Pokemon>> fetchPokemon(List<String> names) async {
 
 List<Param> paramList = [
   Param(
-      icon: "",
+      icon: iconBasics("favorite"),
       id: 0,
       title: 'Favorites',
       url: "images/raichu.png",
