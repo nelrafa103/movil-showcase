@@ -15,17 +15,20 @@ class PokemonAbilitiesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       width: double.infinity,
       child: Card(
-          elevation: 1,
+          elevation: 2,
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
           color: customColors[typeName]!['color']!,
           child: ListTile(
             title: Text(
               pokemonName[0].toUpperCase() + pokemonName.substring(1),
               style: GoogleFonts.montserrat(
                 color: Colors.white,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
               ),
             ),
             trailing: Icon(Icons.info_outline, color: Colors.white),

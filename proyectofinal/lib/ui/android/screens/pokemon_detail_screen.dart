@@ -295,7 +295,24 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
                                                 ),
                                               ),
                                             ),
-                                            ExpasionWidget(pokemon: state.pokemon)
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                                              child: Card(
+                                                elevation: 2,
+                                                shape:
+                                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                color: customColors[state
+                                                    .pokemon
+                                                    .types[0]
+                                                    .type
+                                                    .name]!['color']!,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: ExpasionWidget(pokemon: state.pokemon),
+                                                ),
+                                              ),
+                                            )
                                           ])
                                         ],
                                       ),

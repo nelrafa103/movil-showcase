@@ -68,7 +68,6 @@ class _StatsGraph extends State<StatsGraph> {
     ];
 
     return Container(
-      padding: const EdgeInsets.all(5),
       child: charts.BarChart(
         series,
         animate: true,
