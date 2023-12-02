@@ -75,7 +75,7 @@ const Normal = Color(0xffA8A77A);
 const NormalLighter = Color(0xffC3C2A2);
 const NormalDarker = Color(0xff8B8A60);
 
-const Favorite = Colors.red;
+const Favorite = Color(0xffE74392);
 
 dynamic customColors = {
   "fire": {

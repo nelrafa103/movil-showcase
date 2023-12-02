@@ -26,7 +26,7 @@ class _FilterWidget extends State<FilterWidget> {
     String types = '';
     return Card(
       elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: Container(
         width: double.infinity,
@@ -42,40 +42,37 @@ class _FilterWidget extends State<FilterWidget> {
               right: 0,
               top: widget.paddingPerSize,
               bottom: widget.paddingPerSize),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        widget.param.icon,
-                        height: 100,
-                      ),
-                      FilledButton(
-                        onPressed: null,
-                        style: FilledButton.styleFrom(
-                          padding: const EdgeInsets.all(12.0),
-                        ),
-                        child: Text(
-                          widget.param.title,
-                          style: GoogleFonts.montserrat(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ],
+          child: Center(
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: SvgPicture.asset(
+                  widget.param.icon,
+                  height: 100,
                   ),
-                ],
-              ),
-            ],
+                ),
+
+                Expanded(
+                  child: SizedBox(
+                    child: FilledButton(
+                      onPressed: null,
+                      style: FilledButton.styleFrom(
+                        padding: EdgeInsets.all(7),
+                      ),
+                      child: Text(
+                        widget.param.title,
+                        style: GoogleFonts.montserrat(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
