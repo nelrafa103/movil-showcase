@@ -42,6 +42,10 @@ class PokemonsCubit extends Cubit<PokemonsState> {
   void filterByName(String nombre) async {
     List<String> nameList = [];
     List<int> idsList = [];
+    if (nombre.isEmpty) {
+      _fetch(_limit, _offset);
+      return;
+    }
     if (isNumeric(nombre)) {
       final grapqlResponse =
           await dio.post("https://graphql-pokeapi.graphcdn.app/", data: {
@@ -94,6 +98,7 @@ class PokemonsCubit extends Cubit<PokemonsState> {
             if (element.name.startsWith(nombre.toLowerCase()) &&
                 nombre.isNotEmpty) {
               nameList.add(element.name);
+              print(element.name);
             }
           }
         }
@@ -106,12 +111,13 @@ class PokemonsCubit extends Cubit<PokemonsState> {
             var pokemon = Pokemon.fromJson(response2.data);
             return pokemon;
           });
-
           final results = await Future.wait(searching);
           _list.addAll(results);
           PopulatedPokemons _pokemons = PopulatedPokemons(pokemons: _list);
           _pokemons.setisfiltered();
           emit(_pokemons);
+        } else {
+          emit(PopulatedPokemons(pokemons: []));
         }
       } catch (e) {
         emit(PokemonsError(e.toString()));

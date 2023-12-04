@@ -100,14 +100,54 @@ class CustomSearchBar extends SearchDelegate {
           GoRouter.of(context).go("/");
           context.read<AppCubit>().changeTab(0);
         },
-        icon: Icon(Icons.arrow_back));
+        icon: const Icon(Icons.arrow_back));
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    return Column(
-      children: [],
-    );
+    BlocProvider.of<PokemonsCubit>(context).filterByName(query);
+    return BlocConsumer<PokemonsCubit, PokemonsState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          if (state is PopulatedPokemons) {
+            if (state.pokemons.isEmpty) {
+              return const AlertDialog(
+                title: Text("No se ha podido encontrar un pokemon"),
+              );
+            } else {
+              return GridView.builder(
+                  controller: controller,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 0,
+                    childAspectRatio: 1.6,
+                  ),
+                  itemCount: state.pokemons.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    double screenHeight = MediaQuery.of(context).size.height;
+                    double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
+                    double pokemonSize = screenHeight > 600 ? 50 : 70;
+
+                    return PokemonWidget(
+                      pokemon: state.pokemons[index],
+                      paddingPerSize: paddingPerSize,
+                      pokemonSize: pokemonSize,
+                    );
+                  });
+            }
+          } else if (state is PokemonsError) {
+            return AlertDialog(
+              icon: const Icon(Icons.arrow_downward_sharp),
+              title: const Text("Ha habido un problema"),
+              content: Text(state.message),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 
   @override
@@ -117,26 +157,32 @@ class CustomSearchBar extends SearchDelegate {
         listener: (context, state) {},
         builder: (context, state) {
           if (state is PopulatedPokemons) {
-            return GridView.builder(
-                controller: controller,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 0,
-                  mainAxisSpacing: 0,
-                  childAspectRatio: 1.6,
-                ),
-                itemCount: state.pokemons.length,
-                itemBuilder: (BuildContext context, int index) {
-                  double screenHeight = MediaQuery.of(context).size.height;
-                  double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
-                  double pokemonSize = screenHeight > 600 ? 50 : 70;
+            if (state.pokemons.isEmpty) {
+              return const AlertDialog(
+                title: Text("No se ha podido encontrar un pokemon"),
+              );
+            } else {
+              return GridView.builder(
+                  controller: controller,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 0,
+                    childAspectRatio: 1.6,
+                  ),
+                  itemCount: state.pokemons.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    double screenHeight = MediaQuery.of(context).size.height;
+                    double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
+                    double pokemonSize = screenHeight > 600 ? 50 : 70;
 
-                  return PokemonWidget(
-                    pokemon: state.pokemons[index],
-                    paddingPerSize: paddingPerSize,
-                    pokemonSize: pokemonSize,
-                  );
-                });
+                    return PokemonWidget(
+                      pokemon: state.pokemons[index],
+                      paddingPerSize: paddingPerSize,
+                      pokemonSize: pokemonSize,
+                    );
+                  });
+            }
           } else if (state is PokemonsError) {
             return Text(state.message);
           } else {
