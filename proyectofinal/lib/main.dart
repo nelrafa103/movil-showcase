@@ -8,7 +8,6 @@ import 'package:proyectofinal/states/cubit/app_cubit.dart';
 import 'package:proyectofinal/states/cubit/abilities_cubit.dart';
 import 'package:proyectofinal/states/cubit/pokemon_cubit.dart';
 import 'package:proyectofinal/states/cubit/pokemons_cubit.dart';
-import 'package:proyectofinal/ui/android/screens/pokemon_detail_screen.dart';
 import 'package:proyectofinal/ui/ios/screens/home_screen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:proyectofinal/ui/ios/tabs/pokemon_detail_tab.dart';

@@ -13,7 +13,6 @@ import 'package:proyectofinal/models/pokemon.dart';
 import 'package:proyectofinal/hive.dart';
 import 'package:proyectofinal/states/cubit/pokemon_cubit.dart';
 import 'package:proyectofinal/themes/pokemons_types.dart';
-import 'package:proyectofinal/ui/android/screens/pokemon_detail_screen.dart';
 import 'package:proyectofinal/ui/ios/tabs/pokemon_detail_tab.dart';
 
 class PokemonWidget extends StatefulWidget {
@@ -72,7 +71,7 @@ class _PokemonWidget extends State<PokemonWidget> {
         } else {
           Navigator.of(context).pushReplacement(
             CupertinoPageRoute(
-              builder: (context) => PokemonDetailTab(),
+              builder: (context) => const PokemonDetailTab(),
             ),
           );
         }

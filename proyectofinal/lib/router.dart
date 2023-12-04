@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:proyectofinal/states/cubit/abilities_cubit.dart';
 import 'package:proyectofinal/ui/android/screens/pokemon_detail_screen.dart';
 import 'package:proyectofinal/ui/android/screens/home_screen.dart';
 import 'package:proyectofinal/ui/android/screens/abilities_screen.dart';

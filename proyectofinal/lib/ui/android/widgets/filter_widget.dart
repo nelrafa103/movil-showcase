@@ -23,7 +23,6 @@ class FilterWidget extends StatefulWidget {
 class _FilterWidget extends State<FilterWidget> {
   @override
   Widget build(BuildContext context) {
-    String types = '';
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -48,17 +47,16 @@ class _FilterWidget extends State<FilterWidget> {
                 Expanded(
                   flex: 3,
                   child: SvgPicture.asset(
-                  widget.param.icon,
-                  height: 100,
+                    widget.param.icon,
+                    height: 100,
                   ),
                 ),
-
                 Expanded(
                   child: SizedBox(
                     child: FilledButton(
                       onPressed: null,
                       style: FilledButton.styleFrom(
-                        padding: EdgeInsets.all(7),
+                        padding: const EdgeInsets.all(7),
                       ),
                       child: Text(
                         widget.param.title,

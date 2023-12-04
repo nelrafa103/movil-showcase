@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyectofinal/models/pokemon.dart';
-import 'package:proyectofinal/shared/pokemon.dart';
 import 'package:proyectofinal/themes/pokemons_types.dart';
 
 class PokemonInfoWidget extends StatelessWidget {
   final Pokemon pokemon;
 
-  PokemonInfoWidget({
+  const PokemonInfoWidget({
+    super.key,
     required this.pokemon,
   });
 
@@ -19,7 +18,11 @@ class PokemonInfoWidget extends StatelessWidget {
 
     for (var element in pokemon.types) {
       dynamic type = customColors[element.type.name];
-      icons.add(SvgPicture.asset(type["icon"], semanticsLabel: "", height: 40,));
+      icons.add(SvgPicture.asset(
+        type["icon"],
+        semanticsLabel: "",
+        height: 40,
+      ));
     }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -39,7 +42,7 @@ class PokemonInfoWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  pokemon.height.toString() + " feet",
+                  "${pokemon.height} feet",
                   style: GoogleFonts.montserrat(
                     color: Colors.black,
                     fontWeight: FontWeight.w300,
@@ -48,9 +51,7 @@ class PokemonInfoWidget extends StatelessWidget {
                 ),
               ],
             ),
-        
             const VerticalDivider(),
-        
             Column(
               children: [
                 Text(
@@ -64,9 +65,7 @@ class PokemonInfoWidget extends StatelessWidget {
                 Row(children: icons),
               ],
             ),
-        
-            VerticalDivider(),
-        
+            const VerticalDivider(),
             Column(
               children: [
                 Text(

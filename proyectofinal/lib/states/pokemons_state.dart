@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:proyectofinal/models/pokemon.dart';
 
 abstract class PokemonsState {}

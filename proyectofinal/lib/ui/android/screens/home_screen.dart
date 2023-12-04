@@ -7,7 +7,6 @@ import 'package:proyectofinal/hive.dart';
 import 'package:proyectofinal/states/cubit/pokemons_cubit.dart';
 import 'package:proyectofinal/states/pokemons_state.dart';
 import 'package:proyectofinal/ui/android/widgets/bottom_bar_widget.dart';
-import 'package:proyectofinal/ui/android/widgets/intro_widget.dart';
 import 'package:proyectofinal/ui/android/widgets/pokemon_widget.dart';
 import 'package:proyectofinal/ui/android/widgets/shimmers/pokemon_item.dart';
 

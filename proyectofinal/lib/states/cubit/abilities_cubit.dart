@@ -27,7 +27,7 @@ class AbilitiesCubit extends Cubit<AbilitiesState> {
       final results2 = await Future.wait(future);
       return results2;
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
       return e.toString();
     }
   }
@@ -38,8 +38,8 @@ class AbilitiesCubit extends Cubit<AbilitiesState> {
     emit(AbilitiesLoading());
     try {
       _list.addAll(await _fetch(_limit, _offset));
-      emit(PopulatedAbilities(abilities: _list));
       _offset += 20;
+      emit(PopulatedAbilities(abilities: _list));
     } catch (e) {
       emit(AbilitiesError(e.toString()));
     }
@@ -49,8 +49,8 @@ class AbilitiesCubit extends Cubit<AbilitiesState> {
     emit(AbilitiesLoading());
     try {
       _list.addAll(await _fetch(_limit, _offset));
-      emit(PopulatedAbilities(abilities: _list));
       _offset += 20;
+      emit(PopulatedAbilities(abilities: _list));
     } catch (e) {
       emit(AbilitiesError(e.toString()));
     }

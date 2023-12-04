@@ -16,10 +16,9 @@ class DetailsWidget extends StatelessWidget {
   const DetailsWidget({super.key, required this.pokemon});
   @override
   Widget build(BuildContext context) {
-    bool isFav = false;
-    late Future<PokemonChain> pokemon_chain;
-    late Future<List<Pokemon>> pokemon_list;
-    pokemon_chain = fetchEvolution(pokemon.name);
+    late Future<PokemonChain> pokemonChain;
+    late Future<List<Pokemon>> pokemonList;
+    pokemonChain = fetchEvolution(pokemon.name);
     return Stack(
       children: [
         SizedBox.expand(
@@ -131,7 +130,7 @@ class DetailsWidget extends StatelessWidget {
                                 ),
                               ),
                               FutureBuilder(
-                                  future: pokemon_chain,
+                                  future: pokemonChain,
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
                                       List<String> urls = [];
@@ -151,10 +150,10 @@ class DetailsWidget extends StatelessWidget {
                                         }
                                       }
 
-                                      pokemon_list = fetchPokemon(urls);
+                                      pokemonList = fetchPokemon(urls);
 
                                       return FutureBuilder(
-                                          future: pokemon_list,
+                                          future: pokemonList,
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {
                                               return Wrap(
