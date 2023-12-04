@@ -383,7 +383,13 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
                                                     return const CircularProgressIndicator();
                                                   });
                                             } else if (snapshot.hasError) {
-                                              return Text('${snapshot.error}');
+                                              return AlertDialog(
+                                                  icon:
+                                                      const Icon(Icons.cancel),
+                                                  title: const Text(
+                                                      "There is a problem"),
+                                                  content: Text(
+                                                      '${snapshot.error}'));
                                             }
                                             return const CircularProgressIndicator();
                                           }),

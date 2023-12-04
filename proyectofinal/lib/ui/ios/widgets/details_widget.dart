@@ -171,7 +171,7 @@ class DetailsWidget extends StatelessWidget {
                                             return const CircularProgressIndicator();
                                           });
                                     } else if (snapshot.hasError) {
-                                      return Text('${snapshot.error}');
+                                      return const CircularProgressIndicator();
                                     }
                                     return const CircularProgressIndicator();
                                   }),
