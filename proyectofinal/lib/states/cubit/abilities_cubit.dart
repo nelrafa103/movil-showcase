@@ -33,10 +33,9 @@ class AbilitiesCubit extends Cubit<AbilitiesState> {
   }
 
   void fetch() async {
-    _list.clear();
-
     emit(AbilitiesLoading());
     try {
+      _list.clear();
       _list.addAll(await _fetch(_limit, _offset));
       _offset += 20;
       emit(PopulatedAbilities(abilities: _list));

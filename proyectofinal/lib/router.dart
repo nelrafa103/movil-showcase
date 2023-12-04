@@ -1,4 +1,6 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:proyectofinal/states/cubit/abilities_cubit.dart';
 import 'package:proyectofinal/ui/android/screens/pokemon_detail_screen.dart';
 import 'package:proyectofinal/ui/android/screens/home_screen.dart';
 import 'package:proyectofinal/ui/android/screens/abilities_screen.dart';
@@ -23,7 +25,10 @@ GoRouter router = GoRouter(routes: <RouteBase>[
         ),
         GoRoute(
           path: "busqueda",
-          builder: (context, state) => const SearchScreen(),
+          builder: (context, state) => BlocProvider(
+            create: (context) => AbilitiesCubit()..fetch(),
+            child: const SearchScreen(),
+          ),
         )
       ],
       builder: (context, state) => const MyHomePage(
