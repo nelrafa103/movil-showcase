@@ -6,6 +6,8 @@ import 'package:proyectofinal/states/cubit/abilities_cubit.dart';
 import 'package:proyectofinal/ui/android/widgets/ability_widget.dart';
 
 class AbilitiesTab extends StatefulWidget {
+  const AbilitiesTab({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _AbilitiesTab();

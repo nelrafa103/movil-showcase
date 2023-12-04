@@ -13,4 +13,12 @@ String types = """query pokemons(\$limit: Int, \$offset: Int) {
     }
   }
 }""";
-//String name_image = 
+//String name_image =
+
+String ids = """query pokemons(\$limit: Int, \$offset: Int) {
+  pokemons(limit: \$limit, offset: \$offset) {
+    results {
+      id
+    }
+  }
+}""";

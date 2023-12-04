@@ -1,8 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyectofinal/models/ability.dart';
-import 'package:proyectofinal/themes/pokemons_types.dart';
+import 'package:proyectofinal/shared/pokemon.dart';
 
 class AbilityWidget extends StatefulWidget {
   final Ability ability;
@@ -36,12 +35,15 @@ class _AbilityWidget extends State<AbilityWidget> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('#${widget.ability.id.toString()}',
-                          style: GoogleFonts.montserrat(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                          )),
+                      Text(
+                        '#${widget.ability.id.toString()}',
+                        style: GoogleFonts.montserrat(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ],
                   ),
                   Row(
@@ -50,19 +52,13 @@ class _AbilityWidget extends State<AbilityWidget> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          FilledButton(
-                            onPressed: null,
-                            style: FilledButton.styleFrom(
-                              padding: const EdgeInsets.all(13.0),
-                            ),
-                            child: Text(
-                              widget.ability.name[0].toUpperCase() +
-                                  widget.ability.name.substring(1),
-                              style: GoogleFonts.montserrat(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18,
-                              ),
+                          Text(
+                            widget.ability.name[0].toUpperCase() +
+                                widget.ability.name.substring(1),
+                            style: GoogleFonts.montserrat(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: fontSizes(),
                             ),
                           ),
 
@@ -75,7 +71,7 @@ class _AbilityWidget extends State<AbilityWidget> {
                     ],
                   ),
                   Padding(
-                      padding: const EdgeInsets.all(15.0),
+                      padding: const EdgeInsets.all(9.0),
                       child: Text(
                         widget.ability.effectEntries[1].shortEffect,
                         style: GoogleFonts.montserrat(
@@ -83,6 +79,7 @@ class _AbilityWidget extends State<AbilityWidget> {
                           fontWeight: FontWeight.normal,
                           fontSize: 14,
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ))
                 ],
               ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -51,7 +52,11 @@ class _PokemonWidget extends State<PokemonWidget> {
 
     for (var element in widget.pokemon.types) {
       dynamic type = customColors[element.type.name];
-      icons.add(SvgPicture.asset(type["icon"], semanticsLabel: "", height: 40,));
+      icons.add(SvgPicture.asset(
+        type["icon"],
+        semanticsLabel: "",
+        height: 40,
+      ));
     }
     void changeIcon() {
       setState(() {
@@ -61,14 +66,18 @@ class _PokemonWidget extends State<PokemonWidget> {
 
     void funcion() {
       context.read<PokemonCubit>().providePokemon(widget.pokemon);
-      if (!Platform.isIOS) {
-        GoRouter.of(context).go("/detalle");
+      if (!kIsWeb) {
+        if (!Platform.isIOS) {
+          GoRouter.of(context).go("/detalle");
+        } else {
+          Navigator.of(context).pushReplacement(
+            CupertinoPageRoute(
+              builder: (context) => PokemonDetailTab(),
+            ),
+          );
+        }
       } else {
-        Navigator.of(context).pushReplacement(
-          CupertinoPageRoute(
-            builder: (context) => PokemonDetailTab(),
-          ),
-        );
+        GoRouter.of(context).go("/detalle");
       }
     }
 
@@ -91,9 +100,10 @@ class _PokemonWidget extends State<PokemonWidget> {
               cardColor.last.withOpacity(1)
             ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width > 600
-                  ? kPaddingValue * 2
-                  : 2),
+              padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width > 600
+                      ? kPaddingValue * 2
+                      : 2),
               child: Row(
                 children: [
                   Expanded(
@@ -121,7 +131,6 @@ class _PokemonWidget extends State<PokemonWidget> {
                       ],
                     ),
                   ),
-
                   Expanded(
                     flex: MediaQuery.of(context).size.width > 600 ? 2 : 1,
                     child: Stack(
@@ -154,8 +163,7 @@ class _PokemonWidget extends State<PokemonWidget> {
                                   style: GoogleFonts.montserrat(
                                     color: Colors.white,
                                     fontSize:
-                                        MediaQuery.of(context).size.width >
-                                                600
+                                        MediaQuery.of(context).size.width > 600
                                             ? kFontSizeValue * 2
                                             : kFontSizeValue,
                                     fontWeight: FontWeight.w700,
@@ -163,7 +171,6 @@ class _PokemonWidget extends State<PokemonWidget> {
                             ],
                           ),
                         ),
-
                         Align(
                           alignment: Alignment.center,
                           child: FilledButton(
@@ -183,23 +190,20 @@ class _PokemonWidget extends State<PokemonWidget> {
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700,
                                   fontSize:
-                                  MediaQuery.of(context).size.width >
-                                      600
-                                      ? kFontSizeValue * 2
-                                      : kFontSizeValue - 2,
+                                      MediaQuery.of(context).size.width > 600
+                                          ? kFontSizeValue * 2
+                                          : kFontSizeValue - 2,
                                 ),
                               ),
                             ),
                           ),
                         ),
-
                         Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: icons,
-                          )
-                        ),
+                            alignment: Alignment.bottomCenter,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: icons,
+                            )),
                       ],
                     ),
                   )

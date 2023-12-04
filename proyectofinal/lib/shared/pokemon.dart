@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:proyectofinal/models/param.dart';
 import 'package:proyectofinal/models/pokemon.dart';
 import 'package:proyectofinal/models/pokemon_chain.dart';
@@ -140,4 +143,17 @@ List<Param> paramList = [
 
 String iconBasics(String param) {
   return "icon/Type=${param}.svg";
+}
+
+double androidFont = 18.0;
+double iosFont = 12;
+double fontSizes() {
+  if (!kIsWeb) {
+    if (!Platform.isIOS) {
+      return androidFont;
+    } else {
+      return iosFont;
+    }
+  }
+  return androidFont;
 }

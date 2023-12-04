@@ -55,4 +55,17 @@ class AbilitiesCubit extends Cubit<AbilitiesState> {
       emit(AbilitiesError(e.toString()));
     }
   }
+
+  fetchSpecific(String url) async {
+    emit(AbilitiesLoading());
+    _list.clear();
+    try {
+      final response1 = await dio.get(url);
+      var ability = Ability.fromJson(response1.data);
+      _list.add(ability);
+      emit(PopulatedAbilities(abilities: _list));
+    } catch (e) {
+      emit(AbilitiesError(e.toString()));
+    }
+  }
 }

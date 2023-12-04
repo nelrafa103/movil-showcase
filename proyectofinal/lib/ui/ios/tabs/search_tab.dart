@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:proyectofinal/shared/pokemon.dart';
 import 'package:proyectofinal/states/cubit/pokemons_cubit.dart';
@@ -50,9 +49,29 @@ class _SearchTab extends State<SearchTab> {
                     );
                   });
             } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 0,
+                    childAspectRatio: 1.6,
+                  ),
+                  itemCount: 12,
+                  itemBuilder: (BuildContext context, int index) {
+                    double screenHeight = MediaQuery.of(context).size.height;
+                    double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
+                    double pokemonSize = screenHeight > 600 ? 50 : 70;
+
+                    return GestureDetector(
+                        onTap: () async =>
+                            await BlocProvider.of<PokemonsCubit>(context)
+                                .filterByType(paramList[index].id),
+                        child: FilterWidget(
+                            param: paramList[index],
+                            color: paramList[index].color,
+                            paddingPerSize: paddingPerSize,
+                            pokemonSize: pokemonSize));
+                  });
             }
           } else {
             return GridView.builder(
@@ -69,7 +88,9 @@ class _SearchTab extends State<SearchTab> {
                   double pokemonSize = screenHeight > 600 ? 50 : 70;
 
                   return GestureDetector(
-                      onTap: () async => {},
+                      onTap: () async =>
+                          await BlocProvider.of<PokemonsCubit>(context)
+                              .filterByType(paramList[index].id),
                       child: FilterWidget(
                           param: paramList[index],
                           color: paramList[index].color,

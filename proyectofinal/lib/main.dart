@@ -11,6 +11,7 @@ import 'package:proyectofinal/states/cubit/pokemons_cubit.dart';
 import 'package:proyectofinal/ui/android/screens/pokemon_detail_screen.dart';
 import 'package:proyectofinal/ui/ios/screens/home_screen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:proyectofinal/ui/ios/tabs/pokemon_detail_tab.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,12 +28,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!kIsWeb) {
       if (Platform.isIOS || Platform.isMacOS) {
-        return BlocProvider(
-            create: (context) => PokemonCubit(),
-            child: CupertinoApp(routes: {
-              "/": (_) => const MyHomePage("", title: ""),
-              "/detalle": (_) => const PokemonDetailScreen()
-            },
+        return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => PokemonsCubit()..fetch(),
+              ),
+              BlocProvider(
+                create: (context) => PokemonCubit(),
+              ),
+              BlocProvider(
+                create: (context) => AbilitiesCubit()..fetch(),
+              ),
+            ],
+            child: CupertinoApp(
+              routes: {
+                "/": (_) => const MyHomePage("", title: ""),
+                "/detalle": (_) => const PokemonDetailTab(),
+              },
               debugShowCheckedModeBanner: false,
             ));
       }
@@ -46,7 +58,7 @@ class MyApp extends StatelessWidget {
             create: (context) => PokemonCubit(),
           ),
           BlocProvider(
-            create: (context) => AbilitiesCubit(),
+            create: (context) => AbilitiesCubit()..fetch(),
           ),
           BlocProvider(
             create: (context) => AppCubit()..changeTab(0),

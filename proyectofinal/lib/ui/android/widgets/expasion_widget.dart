@@ -34,8 +34,8 @@ class _ExpasionWidget extends State<ExpasionWidget> {
           ExpansionPanel(
             headerBuilder: (BuildContext context, bool isExpanded) {
               return ListTile(
-
-                title: Text('Movements',
+                title: Text(
+                  'Movements',
                   style: GoogleFonts.montserrat(
                     color: Colors.black54,
                     fontWeight: FontWeight.w700,
@@ -51,12 +51,13 @@ class _ExpasionWidget extends State<ExpasionWidget> {
                       padding: const EdgeInsets.symmetric(horizontal: 9),
                       width: double.infinity,
                       child: Card(
-                          color: customColors[widget.pokemon.types[0].type.name]![
-                              'color']!,
+                          color: customColors[
+                              widget.pokemon.types[0].type.name]!['color']!,
                           child: Padding(
                               padding: const EdgeInsets.all(10),
                               child: Text(
-                                item.move.name[0].toUpperCase() + item.move.name.substring(1),
+                                item.move.name[0].toUpperCase() +
+                                    item.move.name.substring(1),
                                 style: GoogleFonts.montserrat(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
