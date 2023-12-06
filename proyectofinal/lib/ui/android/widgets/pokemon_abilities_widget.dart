@@ -95,7 +95,7 @@ class PokemonAbilitiesWidget extends StatelessWidget {
               builder: (context, state) {
             if (state is PopulatedAbilities) {
               return SizedBox(
-                height: 600,
+                height: 800,
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),

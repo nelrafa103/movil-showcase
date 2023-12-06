@@ -20,26 +20,39 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late ScrollController controller;
+  late ScrollController _scrollController;
+  bool lastStatus = true;
 
   @override
   void initState() {
     super.initState();
-    controller = ScrollController();
+    _scrollController = ScrollController()..addListener(_scrollListener);
+  }
 
-    controller.addListener(() async {
-      if (controller.hasClients) {
-        if (controller.position.maxScrollExtent == controller.offset) {
-          BlocProvider.of<PokemonsCubit>(context).addMore();
-        }
+  void _scrollListener(){
+    if(_isShrink != lastStatus){
+      setState(() {
+        lastStatus = _isShrink;
+      });
+    }
+
+    if (_scrollController.hasClients) {
+      if (_scrollController.position.maxScrollExtent == _scrollController.offset) {
+        BlocProvider.of<PokemonsCubit>(context).addMore();
       }
-    });
+    }
+  }
+
+  bool get _isShrink {
+    return _scrollController.hasClients &&
+        _scrollController.offset > (_scrollController.position.maxScrollExtent - kToolbarHeight);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: NestedScrollView(
+          controller: _scrollController,
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
@@ -47,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 stretch: true,
                 floating: true,
                 pinned: true,
-                backgroundColor: Colors.white60,
+                backgroundColor: Colors.white,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Image.asset(
                     'images/AppBarBG.png',
@@ -102,34 +115,38 @@ class _MyHomePageState extends State<MyHomePage> {
               builder: (context, state) {
                 if (state is PopulatedPokemons) {
                   double screenWidth = MediaQuery.of(context).size.width;
-                  return GridView.builder(
-                      controller: controller,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: screenWidth < 600 ? 2 : 4,
-                        crossAxisSpacing: 0,
-                        mainAxisSpacing: 0,
-                        childAspectRatio: screenWidth < 600 ? 1.6 : 1.1,
-                      ),
-                      itemCount: state.pokemons.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        double screenHeight =
-                            MediaQuery.of(context).size.height;
-                        double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
-                        double pokemonSize = screenHeight > 600 ? 50 : 70;
-                        if (state.pokemons.length > index) {
-                          DbInitializer.insert(PokemonDao(
-                              name: state.pokemons[index].name,
-                              id: state.pokemons[index].id,
-                              url: state.pokemons[index].sprites.frontDefault));
-                          return PokemonWidget(
-                            pokemon: state.pokemons[index],
-                            paddingPerSize: paddingPerSize,
-                            pokemonSize: pokemonSize,
-                          );
-                        } else {
-                          return const PokemonShimmerWidget();
-                        }
-                      });
+                  return MediaQuery.removePadding(
+                    removeTop: true,
+                    context: context,
+                    child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: screenWidth < 600 ? 2 : 4,
+                          crossAxisSpacing: 0,
+                          mainAxisSpacing: 0,
+                          childAspectRatio: screenWidth < 600 ? 1.6 : 1.1,
+                        ),
+                        itemCount: state.pokemons.length,
+
+                        itemBuilder: (BuildContext context, int index) {
+                          double screenHeight =
+                              MediaQuery.of(context).size.height;
+                          double paddingPerSize = screenHeight > 600 ? 4.0 : 8.0;
+                          double pokemonSize = screenHeight > 600 ? 50 : 70;
+                          if (state.pokemons.length > index) {
+                            DbInitializer.insert(PokemonDao(
+                                name: state.pokemons[index].name,
+                                id: state.pokemons[index].id,
+                                url: state.pokemons[index].sprites.frontDefault));
+                            return PokemonWidget(
+                              pokemon: state.pokemons[index],
+                              paddingPerSize: paddingPerSize,
+                              pokemonSize: pokemonSize,
+                            );
+                          } else {
+                            return const PokemonShimmerWidget();
+                          }
+                        }),
+                  );
                 } else {
                   return const Center(
                     child: CircularProgressIndicator(),
