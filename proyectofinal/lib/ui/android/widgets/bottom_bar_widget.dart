@@ -49,6 +49,7 @@ class _BottomBar extends State<BottomBar> {
                 icon: Icon(Icons.search_outlined),
                 label: 'Buscar'),
             NavigationDestination(
+              enabled: false,
                 selectedIcon: Icon(Icons.settings),
                 icon: Icon(Icons.settings_outlined),
                 label: 'Configuración'),
