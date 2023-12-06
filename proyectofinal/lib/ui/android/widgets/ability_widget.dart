@@ -80,7 +80,7 @@ class _AbilityWidget extends State<AbilityWidget> {
                 if (state is PopulatedAbilities) {
                   return CupertinoActionSheet(
                     title: Text(
-                      ability.toUpperCase() + ability.substring(1),
+                      ability[0].toUpperCase() + ability.substring(1),
                       overflow: TextOverflow.fade,
                     ),
                     message: Text(
