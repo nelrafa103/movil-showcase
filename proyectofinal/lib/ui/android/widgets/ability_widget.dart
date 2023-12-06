@@ -119,6 +119,8 @@ class _AbilityWidget extends State<AbilityWidget> {
                       children: <Widget>[
                         Text(
                           ability,
+                          maxLines: 8,
+                          overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w700,
                             fontSize: 20,
@@ -137,7 +139,8 @@ class _AbilityWidget extends State<AbilityWidget> {
                                 ),
                                 subtitle: Text(
                                   short,
-                                  // overflow: TextOverflow.ellipsis,
+                                  maxLines: 8,
+                                  overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.montserrat(
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -147,7 +150,7 @@ class _AbilityWidget extends State<AbilityWidget> {
                             ),
                           ),
                         ),
-                        Card(
+                        /* Card(
                           child: Center(
                             child: ListTile(
                               title: Text(
@@ -166,7 +169,7 @@ class _AbilityWidget extends State<AbilityWidget> {
                               isThreeLine: true,
                             ),
                           ),
-                        ),
+                        ), */
                         Card(
                           child: Center(
                             child: ListTile(
@@ -178,7 +181,8 @@ class _AbilityWidget extends State<AbilityWidget> {
                               ),
                               subtitle: Text(
                                 description,
-                                // overflow: TextOverflow.ellipsis,
+                                maxLines: 8,
+                                overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w500,
                                 ),
