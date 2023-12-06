@@ -10,12 +10,10 @@ import 'package:proyectofinal/states/abilities_state.dart';
 import 'package:proyectofinal/states/cubit/abilities_cubit.dart';
 import 'package:proyectofinal/themes/pokemons_types.dart';
 
-
-class PokemonAbilitiesWidget extends StatelessWidget{
+class PokemonAbilitiesWidget extends StatelessWidget {
   final String pokemonName;
   final String typeName;
   final Ability ability;
-
 
   const PokemonAbilitiesWidget({
     super.key,
@@ -45,15 +43,12 @@ class PokemonAbilitiesWidget extends StatelessWidget{
             ),
             trailing: Icon(Icons.info_outline, color: Colors.white),
             onTap: () {
-               _showAbilityBottomSheet(context);
+              _showAbilityBottomSheet(context);
             },
-
             selected: true,
           )),
     );
   }
-
-
 
   void _showAbilityBottomSheet(BuildContext context) {
     if (!kIsWeb && Platform.isIOS) {
@@ -134,7 +129,6 @@ class PokemonAbilitiesWidget extends StatelessWidget{
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-
                                   isThreeLine: true,
                                 ),
                               ),
@@ -159,7 +153,6 @@ class PokemonAbilitiesWidget extends StatelessWidget{
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-
                                 isThreeLine: true,
                               ),
                             ),
@@ -182,7 +175,6 @@ class PokemonAbilitiesWidget extends StatelessWidget{
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-
                                 isThreeLine: true,
                               ),
                             ),
@@ -212,5 +204,4 @@ class PokemonAbilitiesWidget extends StatelessWidget{
           });
         });
   }
-
 }
