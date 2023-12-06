@@ -1,7 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proyectofinal/models/ability.dart';
 import 'package:proyectofinal/shared/pokemon.dart';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:proyectofinal/states/abilities_state.dart';
+import 'package:proyectofinal/states/cubit/abilities_cubit.dart';
+import 'package:proyectofinal/themes/pokemons_types.dart';
+
 
 class AbilityWidget extends StatefulWidget {
   final Ability ability;
@@ -19,70 +29,42 @@ class _AbilityWidget extends State<AbilityWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () => (),
-        child: Card(
-          elevation: 3,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: SizedBox(
-            width: double.infinity,
-            height: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '#${widget.ability.id.toString()}',
-                        style: GoogleFonts.montserrat(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Card(
+            elevation: 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: ListTile(
+              title: Text(
+                  '#${widget.ability.id.toString()} - ${widget.ability.name[0].toUpperCase() +
+                      widget.ability.name.substring(1)}',
+                  style: GoogleFonts.montserrat(
+                    color: Colors.black87,
+                    fontSize: fontSizes(),
+                    fontWeight: FontWeight.w700,
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            widget.ability.name[0].toUpperCase() +
-                                widget.ability.name.substring(1),
-                            style: GoogleFonts.montserrat(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: fontSizes(),
-                            ),
-                          ),
+                  overflow: TextOverflow.ellipsis,
+                ),
 
-                          /* Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: icons,
-                          ) */
-                        ],
-                      ),
-                    ],
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.all(9.0),
-                      child: Text(
-                        widget.ability.effectEntries[1].shortEffect,
-                        style: GoogleFonts.montserrat(
-                          color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ))
-                ],
+              subtitle: Text(
+                widget.ability.effectEntries[1].shortEffect,
+                style: GoogleFonts.montserrat(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
+
+              selected: true,
+
+              trailing: Icon(Icons.info_outline, color: Colors.black87),
+              onTap: () {
+                //_showAbilityBottomSheet(context);
+              },
+
             ),
           ),
         ));

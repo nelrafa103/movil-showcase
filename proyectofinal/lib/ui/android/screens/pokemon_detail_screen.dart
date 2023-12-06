@@ -93,6 +93,12 @@ class _PokemonDetailState extends State<PokemonDetailScreen>
     _controller.repeat();
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   void changeIcon() {
     setState(() {
       isFav = !isFav;

@@ -34,26 +34,27 @@ class _AbilitiesScreen extends State<AbilitiesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<AbilitiesCubit, AbilitiesState>(
-        builder: (context, state) {
-          if (state is PopulatedAbilities) {
-            return GridView.builder(
-                controller: controller,
-                itemCount: state.abilities.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1,
-                  crossAxisSpacing: 0,
-                  mainAxisSpacing: 0,
-                  childAspectRatio: 3,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  return AbilityWidget(ability: state.abilities[index]);
-                });
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
+      body: SafeArea(
+        child: BlocBuilder<AbilitiesCubit, AbilitiesState>(
+          builder: (context, state) {
+            if (state is PopulatedAbilities) {
+              return GridView.builder(
+                  controller: controller,
+                  itemCount: state.abilities.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 0,
+                    childAspectRatio: 4.4,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    return AbilityWidget(ability: state.abilities[index]);
+                  });
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),),
       bottomNavigationBar: const BottomBar(),
     );
   }
