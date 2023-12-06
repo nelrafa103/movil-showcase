@@ -120,12 +120,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             ? const Icon(
                           Icons.favorite,
                           size: 24,
-                          color: Colors.white,
+                          color: Colors.black87,
                         )
                             : const Icon(
                           Icons.favorite_border,
                           size: 24,
-                          color: Colors.white,
+                          color: Colors.black87,
                         )),
                   ),
                 ],

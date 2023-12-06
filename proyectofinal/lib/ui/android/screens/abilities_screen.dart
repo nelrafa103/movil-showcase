@@ -28,6 +28,7 @@ class _AbilitiesScreen extends State<AbilitiesScreen> {
         }
       }
     });
+
     super.initState();
   }
 
