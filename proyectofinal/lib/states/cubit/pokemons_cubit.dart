@@ -21,6 +21,7 @@ class PokemonsCubit extends Cubit<PokemonsState> {
     _list.clear();
     emit(PokemonsLoading());
     try {
+      _offset = 0;
       _list.addAll(await _fetch(_limit, 0));
       emit(PopulatedPokemons(pokemons: _list));
       _offset += 20;

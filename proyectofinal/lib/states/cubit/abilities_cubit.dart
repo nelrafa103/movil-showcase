@@ -13,6 +13,8 @@ class AbilitiesCubit extends Cubit<AbilitiesState> {
 
   Future<dynamic> _fetch(int limit, int offset) async {
     try {
+      _list.clear();
+
       String url =
           "https://pokeapi.co/api/v2/ability?limit=${limit}&offset=${offset}";
 
@@ -36,6 +38,7 @@ class AbilitiesCubit extends Cubit<AbilitiesState> {
     emit(AbilitiesLoading());
     try {
       _list.clear();
+      _offset = 0;
       _list.addAll(await _fetch(_limit, _offset));
       _offset += 20;
       emit(PopulatedAbilities(abilities: _list));

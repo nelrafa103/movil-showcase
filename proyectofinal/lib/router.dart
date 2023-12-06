@@ -17,7 +17,10 @@ GoRouter router = GoRouter(routes: <RouteBase>[
         ),
         GoRoute(
           path: "habilidades",
-          builder: (context, state) => const AbilitiesScreen(),
+          builder: (context, state) => BlocProvider(
+            create: (context) => AbilitiesCubit()..fetch(),
+            child: const AbilitiesScreen(),
+          ),
         ),
         GoRoute(
           path: "detalle",
