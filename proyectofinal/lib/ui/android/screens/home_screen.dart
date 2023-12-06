@@ -6,9 +6,13 @@ import 'package:proyectofinal/models/hive/pokemon_dao.dart';
 import 'package:proyectofinal/hive.dart';
 import 'package:proyectofinal/states/cubit/pokemons_cubit.dart';
 import 'package:proyectofinal/states/pokemons_state.dart';
+import 'package:proyectofinal/ui/android/screens/search_screen.dart';
 import 'package:proyectofinal/ui/android/widgets/bottom_bar_widget.dart';
 import 'package:proyectofinal/ui/android/widgets/pokemon_widget.dart';
 import 'package:proyectofinal/ui/android/widgets/shimmers/pokemon_item.dart';
+
+import '../../../shared/pokemon.dart';
+import '../widgets/filter_widget.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage(String s, {super.key, required this.title});
@@ -22,6 +26,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late ScrollController _scrollController;
   bool lastStatus = true;
+
+  bool isFav = false;
 
   @override
   void initState() {
@@ -50,6 +56,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    void changeIcon() {
+      setState(() {
+        isFav = !isFav;
+      });
+    }
+
     return Scaffold(
       body: NestedScrollView(
           controller: _scrollController,
@@ -95,15 +108,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   Padding(
                     padding: const EdgeInsets.all(18),
                     child: IconButton(
-                        onPressed: () {
-                          //Mostrar listado de pokemones favoritos
+                        onPressed: () async => {
+                          await BlocProvider.of<PokemonsCubit>(context)
+                              .filterByType(paramList[0].id)
+                              .then((value) => MyHomePage("Por aqui",
+                            title: '',)),
 
-                          // changeIcon();
+                          changeIcon()
                         },
-                        icon: const Icon(
+                        icon: isFav
+                            ? const Icon(
+                          Icons.favorite,
+                          size: 24,
+                          color: Colors.white,
+                        )
+                            : const Icon(
                           Icons.favorite_border,
                           size: 24,
-                          color: Colors.black54,
+                          color: Colors.white,
                         )),
                   ),
                 ],
